@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel de Processos</title>
+</head>
+<body>
+
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F2F4F7;--surface:#FFFFFF;--surface2:#F8F9FB;
+  --bd:rgba(0,0,0,0.08);--bd2:rgba(0,0,0,0.14);
+  --t1:var(--color-text-primary);--t2:var(--color-text-secondary);
+  --blue:#2563EB;--blue-bg:#EFF4FF;
+  --green:#16A34A;--green-bg:#F0FDF4;
+  --amber:#B45309;--amber-bg:#FFFBEB;
+  --red:#DC2626;--red-bg:#FEF2F2;
+  --r:10px;
+}
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0D1117;--surface:#161B27;--surface2:#1C2333;--bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.14);--blue-bg:#1E3A6E;--green-bg:#14291F;--amber-bg:#2D1F07;--red-bg:#2D0A0A}
+}
+body{background:var(--bg);font-family:var(--font-sans);font-size:13px;color:var(--t1);min-height:100vh}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 24px 48px}
+.hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px}
+.hdr-left{flex:1;min-width:0}
+.title-wrap{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.title-display{font-size:18px;font-weight:700;letter-spacing:-0.4px;cursor:pointer;border-bottom:1.5px dashed transparent;transition:border-color .2s;padding-bottom:1px;max-width:520px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.title-display:hover{border-bottom-color:var(--blue)}
+.edit-ic{font-size:12px;color:var(--t2);cursor:pointer;opacity:0;transition:opacity .2s}
+.title-wrap:hover .edit-ic{opacity:1}
+.title-input{font-size:18px;font-weight:700;letter-spacing:-0.4px;background:transparent;border:none;border-bottom:2px solid var(--blue);outline:none;color:var(--t1);padding-bottom:1px;min-width:200px;max-width:520px}
+.subtitle-wrap{display:flex;align-items:center;gap:6px}
+.subtitle-display{font-size:12px;color:var(--t2);cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .2s;padding-bottom:1px}
+.subtitle-display:hover{border-bottom-color:var(--blue);color:var(--t1)}
+.subtitle-edit-ic{font-size:10px;color:var(--t2);cursor:pointer;opacity:0;transition:opacity .2s}
+.subtitle-wrap:hover .subtitle-edit-ic{opacity:1}
+.subtitle-input{font-size:12px;background:transparent;border:none;border-bottom:1.5px solid var(--blue);outline:none;color:var(--t1);padding-bottom:1px;min-width:180px;max-width:400px}
+.hdr-actions{display:flex;gap:8px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;border:none;transition:all .15s;white-space:nowrap}
+.btn:hover{opacity:.85}
+.btn-ghost{background:var(--surface);border:1px solid var(--bd2);color:var(--t1)}
+.btn-primary{background:var(--blue);color:#fff}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:14px 16px}
+.kpi-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:14px;font-weight:700}
+.kpi-val{font-size:26px;font-weight:700;letter-spacing:-0.8px;line-height:1}
+.kpi-label{font-size:11.5px;color:var(--t2);margin-top:3px}
+.kpi-delta{font-size:11px;margin-top:6px;display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-weight:500}
+.kpi-blue .kpi-icon{background:var(--blue-bg);color:var(--blue)}
+.kpi-red .kpi-icon{background:var(--red-bg);color:var(--red)}
+.kpi-green .kpi-icon{background:var(--green-bg);color:var(--green)}
+.kpi-amber .kpi-icon{background:var(--amber-bg);color:var(--amber)}
+.delta-up{background:var(--green-bg);color:var(--green)}
+.delta-dn{background:var(--red-bg);color:var(--red)}
+.delta-n{background:var(--blue-bg);color:var(--blue)}
+.fbar{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:10px 14px;display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.fsep{width:1px;height:22px;background:var(--bd2);flex-shrink:0}
+.srch{position:relative;flex:1;min-width:160px}
+.srch-ic{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--t2);font-size:13px;pointer-events:none}
+.srch input{width:100%;padding:6px 9px 6px 28px;border-radius:7px;border:1px solid var(--bd);background:var(--surface2);font-size:12.5px;color:var(--t1);outline:none}
+.srch input:focus{border-color:var(--blue)}
+select.fsel{padding:6px 10px;border-radius:7px;border:1px solid var(--bd);background:var(--surface2);font-size:12.5px;color:var(--t1);outline:none;cursor:pointer}
+select.fsel:focus{border-color:var(--blue)}
+.tcard{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.row-grid{display:flex;align-items:stretch;min-height:64px}
+.col-proc{width:220px;flex-shrink:0;padding:12px 14px 12px 16px;border-right:1px solid var(--bd)}
+.col-resp{width:150px;flex-shrink:0;padding:12px 14px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center}
+.col-prazo{width:120px;flex-shrink:0;padding:12px 14px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center}
+.col-pri{width:90px;flex-shrink:0;padding:12px 14px;border-right:1px solid var(--bd);display:flex;align-items:center;justify-content:center}
+.col-tl{flex:1;min-width:0;padding:10px 16px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.col-acts{width:88px;flex-shrink:0;padding:12px 10px;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+/* THEAD — todas as colunas com alinhamento centralizado idêntico à col-pri */
+.thead-row{display:flex;background:var(--surface2);border-bottom:1px solid var(--bd)}
+.th{font-size:10.5px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
+.thead-row .col-proc{display:flex;align-items:center;justify-content:center;padding:10px 14px}
+.thead-row .col-resp{display:flex;align-items:center;justify-content:center;padding:10px 14px}
+.thead-row .col-prazo{display:flex;align-items:center;justify-content:center;padding:10px 14px}
+.thead-row .col-pri{display:flex;align-items:center;justify-content:center;padding:10px 14px}
+.thead-row .col-tl{display:flex;flex-direction:column;justify-content:flex-end;padding:10px 16px 0}
+.thead-row .col-acts{display:flex;align-items:center;justify-content:center;padding:10px 14px}
+.step-labels-row{display:flex;justify-content:space-between;padding:0 0 6px;width:100%;gap:2px}
+.step-lbl{font-size:8px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.2px;text-align:center;flex:1;cursor:default;line-height:1.3;overflow:hidden;padding:0 1px;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-height:2.6em}
+.step-lbl:hover{color:var(--blue)}
+.prow{border-bottom:1px solid var(--bd);transition:background .12s}
+.prow:last-child{border-bottom:none}
+.prow:hover{background:rgba(37,99,235,.025)}
+.proc-id{font-size:10px;color:var(--t2);font-family:var(--font-mono);margin-bottom:2px;letter-spacing:.3px}
+.proc-name{font-size:12.5px;font-weight:600;letter-spacing:-0.2px;line-height:1.3;word-break:break-word}
+.stag{font-size:9.5px;padding:2px 6px;border-radius:4px;font-weight:500;margin-top:4px;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stag-blue{background:var(--blue-bg);color:var(--blue)}
+.stag-green{background:var(--green-bg);color:var(--green)}
+.stag-amber{background:var(--amber-bg);color:var(--amber)}
+.stag-red{background:var(--red-bg);color:var(--red)}
+.avatar{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#fff;flex-shrink:0}
+.resp-name{font-size:12px;font-weight:500}
+.prazo-wrap{display:flex;align-items:center;gap:5px}
+.prazo-val{font-size:12px}
+.pb-ok{color:var(--green)}
+.pb-soon{background:var(--amber-bg);color:var(--amber);padding:2px 5px;border-radius:4px;font-size:10px;font-weight:600}
+.pb-overdue{background:var(--red-bg);color:var(--red);padding:2px 5px;border-radius:4px;font-size:10px;font-weight:600}
+.pri{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:5px;font-size:11px;font-weight:600}
+.pri-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.pri-high{background:var(--red-bg);color:var(--red)}
+.pri-med{background:var(--amber-bg);color:var(--amber)}
+.pri-low{background:var(--green-bg);color:var(--green)}
+.tl-outer{position:relative;height:20px;width:100%}
+.tl-track{position:absolute;top:50%;left:0;right:0;height:1.5px;background:var(--bd2);transform:translateY(-50%);border-radius:2px}
+.tl-fill{position:absolute;top:50%;left:0;height:1.5px;background:var(--blue);transform:translateY(-50%);border-radius:2px;transition:width .4s}
+.tl-dots{position:relative;display:flex;justify-content:space-between;align-items:center;height:20px;width:100%}
+.tl-dot{width:9px;height:9px;border-radius:50%;border:2px solid;position:relative;z-index:2;cursor:pointer;transition:transform .15s,box-shadow .15s;flex-shrink:0}
+.tl-dot:hover{transform:scale(1.5)}
+.tl-dot.done{background:var(--blue);border-color:var(--blue)}
+.tl-dot.active{background:var(--green);border-color:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.2)}
+.tl-dot.future{background:var(--surface);border-color:var(--bd2)}
+.tl-tip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(15,15,20,.88);color:#fff;font-size:10px;white-space:nowrap;padding:4px 8px;border-radius:5px;pointer-events:none;z-index:200;max-width:180px;white-space:normal;text-align:center;line-height:1.4}
+.tl-dot:hover .tl-tip{display:block}
+.acts{display:flex;gap:4px}
+.ab{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);transition:all .13s}
+.ab:hover{transform:scale(1.08)}
+.ab.adv:hover{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.ab.edit:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}
+.ab.del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+.tfooter{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-top:1px solid var(--bd);background:var(--surface2)}
+.tfooter span{font-size:11.5px;color:var(--t2)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--surface);border-radius:14px;border:1px solid var(--bd);width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--bd)}
+.modal-hdr h3{font-size:15px;font-weight:700;letter-spacing:-0.3px}
+.modal-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t2)}
+.modal-close:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}
+.modal-body{padding:18px 20px}
+.fgroup{margin-bottom:14px}
+.fgroup label{display:block;font-size:11.5px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+.finput{width:100%;padding:8px 11px;border-radius:7px;border:1px solid var(--bd2);background:var(--surface2);font-size:13px;color:var(--t1);outline:none;font-family:var(--font-sans)}
+.finput:focus{border-color:var(--blue);background:var(--surface)}
+select.finput{cursor:pointer}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--bd)}
+.err{font-size:11px;color:var(--red);margin-top:4px;display:none}
+.err.show{display:block}
+.confirm-box{background:var(--surface);border-radius:12px;border:1px solid var(--bd);width:100%;max-width:380px;padding:24px;text-align:center}
+.confirm-box h3{font-size:15px;font-weight:700;margin-bottom:8px}
+.confirm-box p{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.6}
+.confirm-btns{display:flex;gap:10px;justify-content:center}
+.steps-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;max-height:340px;overflow-y:auto}
+.step-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--surface2)}
+.step-num{font-size:10.5px;color:var(--t2);font-weight:600;min-width:20px;text-align:center}
+.step-item input{flex:1;border:none;background:transparent;font-size:12.5px;color:var(--t1);outline:none;font-family:var(--font-sans)}
+.step-item input:focus{border-bottom:1px solid var(--blue)}
+.step-del{width:22px;height:22px;border-radius:5px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t2)}
+.step-del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+.toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--bd);border-radius:9px;padding:10px 14px;font-size:12.5px;font-weight:500;pointer-events:all;animation:toastIn .25s ease;min-width:220px}
+.toast-ic{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0}
+.t-green .toast-ic{background:var(--green)}
+.t-blue .toast-ic{background:var(--blue)}
+.t-red .toast-ic{background:var(--red)}
+.t-amber .toast-ic{background:var(--amber)}
+@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.toast.out{animation:toastOut .2s ease forwards}
+@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
+</style>
+
+<div class="wrap">
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="title-wrap">
+      <span class="title-display" id="title-display" title="Clique para editar">Processos de Compra de Alimentos</span>
+      <span class="edit-ic" onclick="startTitleEdit()">✎</span>
+    </div>
+    <input class="title-input" id="title-input" style="display:none" value="Processos de Compra de Alimentos">
+    <div class="subtitle-wrap" id="subtitle-wrap">
+      <span class="subtitle-display" id="subtitle-display" title="Clique para editar">Acompanhamento em tempo real · Alimentos &amp; Insumos</span>
+      <span class="subtitle-edit-ic" onclick="startSubtitleEdit()">✎</span>
+    </div>
+    <input class="subtitle-input" id="subtitle-input" style="display:none" value="Acompanhamento em tempo real · Alimentos &amp; Insumos">
+  </div>
+  <div class="hdr-actions">
+    <button class="btn btn-ghost" onclick="openStepsManager()">⚙ Gerenciar etapas</button>
+    <button class="btn btn-ghost" onclick="exportCSV()">↓ Exportar CSV</button>
+    <button class="btn btn-primary" onclick="openModal(null)">+ Novo processo</button>
+  </div>
+</div>
+
+<div class="kpi-row">
+  <div class="kpi kpi-blue"><div class="kpi-icon">▤</div><div class="kpi-val" id="k-active">—</div><div class="kpi-label">Processos ativos</div><span class="kpi-delta delta-n" id="k-adelta"></span></div>
+  <div class="kpi kpi-red"><div class="kpi-icon">!</div><div class="kpi-val" id="k-high">—</div><div class="kpi-label">Alta prioridade</div><span class="kpi-delta delta-dn" id="k-hdelta"></span></div>
+  <div class="kpi kpi-green"><div class="kpi-icon">✓</div><div class="kpi-val" id="k-done">—</div><div class="kpi-label">Concluídos</div><span class="kpi-delta delta-up" id="k-ddelta"></span></div>
+  <div class="kpi kpi-amber"><div class="kpi-icon">◐</div><div class="kpi-val" id="k-avg">—</div><div class="kpi-label">Avanço médio</div><span class="kpi-delta delta-n" id="k-avdelta"></span></div>
+</div>
+
+<div class="fbar">
+  <div class="srch"><span class="srch-ic">⌕</span><input id="fsearch" type="text" placeholder="Buscar processo SEI, produto…" oninput="renderTable()"></div>
+  <div class="fsep"></div>
+  <select class="fsel" id="fetapa" onchange="renderTable()"><option value="">Todas as etapas</option></select>
+  <select class="fsel" id="fpri" onchange="renderTable()"><option value="">Prioridade</option><option>Alta</option><option>Média</option><option>Baixa</option></select>
+  <select class="fsel" id="fresp" onchange="renderTable()"><option value="">Responsável</option></select>
+  <div class="fsep"></div>
+  <select class="fsel" id="fsort" onchange="renderTable()"><option value="">Ordenar por</option><option value="prazo">Prazo</option><option value="pri">Prioridade</option><option value="step">Avanço</option></select>
+</div>
+
+<div class="tcard">
+  <div class="thead-row" id="thead-row">
+    <div class="col-proc th">Produto / SEI</div>
+    <div class="col-resp th">Responsável</div>
+    <div class="col-prazo th">Prazo</div>
+    <div class="col-pri th">Prioridade</div>
+    <div class="col-tl" style="display:flex;flex-direction:column;justify-content:flex-end;padding:10px 16px 0">
+      <div class="th" style="margin-bottom:6px">Etapas do processo</div>
+      <div class="step-labels-row" id="step-labels-row"></div>
+    </div>
+    <div class="col-acts th">Ações</div>
+  </div>
+  <div id="tbody"></div>
+  <div class="tfooter"><span id="tcount"></span><span id="tupd">Atualizado agora</span></div>
+</div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<div class="overlay" id="overlay" style="display:none" onclick="overlayClickProc(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3 id="modal-title">Novo processo</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fgroup"><label>Produto *</label><input class="finput" id="f-name" placeholder="Ex: Arroz integral 50kg"><div class="err" id="e-name">Campo obrigatório</div></div>
+      <div class="frow">
+        <div class="fgroup"><label>Processo SEI *</label><input class="finput" id="f-id" placeholder="Ex: 00190.000001/2025-01"><div class="err" id="e-id">Campo obrigatório</div></div>
+        <div class="fgroup"><label>Prazo (DD/MM/AAAA)</label><input class="finput" id="f-prazo" placeholder="Ex: 30/05/2025" type="text"></div>
+      </div>
+      <div class="fgroup"><label>Responsável *</label><input class="finput" id="f-resp" placeholder="Nome completo"><div class="err" id="e-resp">Campo obrigatório</div></div>
+      <div class="frow">
+        <div class="fgroup"><label>Prioridade</label><select class="finput" id="f-pri"><option>Alta</option><option selected>Média</option><option>Baixa</option></select></div>
+        <div class="fgroup"><label>Etapa atual</label><select class="finput" id="f-step"></select></div>
+      </div>
+      <div class="fgroup"><label>Observações</label><textarea class="finput" id="f-obs" rows="2" placeholder="Notas adicionais…" style="resize:vertical"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveModal()">Salvar processo</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="steps-overlay" style="display:none" onclick="overlayClickSteps(event)">
+  <div class="modal" style="max-width:480px" onclick="event.stopPropagation()">
+    <div class="modal-hdr">
+      <h3>Gerenciar etapas</h3>
+      <button class="modal-close" onclick="closeStepsManager()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:12px;color:var(--t2);margin-bottom:12px">Renomeie, exclua ou adicione etapas. A timeline se atualiza automaticamente.</p>
+      <div class="steps-list" id="steps-list"></div>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="addStepItem()">+ Adicionar etapa</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeStepsManager()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveSteps()">Aplicar alterações</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="confirm-overlay" style="display:none" onclick="closeConfirm()">
+  <div class="confirm-box" onclick="event.stopPropagation()">
+    <h3>Excluir processo?</h3>
+    <p id="confirm-msg">Esta ação não pode ser desfeita.</p>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn" style="background:var(--red);color:#fff" onclick="confirmDelete()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = 'https://ppgdrwjimqurjuseyqhs.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_84mc4FU-er6neFa1LAVlHA_JlTpuO32';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let STEPS=[
+  'Levantamento da demanda',
+  'Pesquisa de mercado e validação',
+  'Elaboração e aprovação do ETP',
+  'Preparação da chamada pública',
+  'Análise jurídica e autorização',
+  'Publicação e divulgação do edital',
+  'Chamada aberta',
+  'Análise dos documentos',
+  'Divulgação dos resultados',
+  'Homologação',
+  'Contratação',
+  'Entrega',
+  'Pagamento/liquidação'
+];
+let tempSteps=[];
+
+function abbr(s){
+  const words=s.split(' ');
+  if(s.length<=10) return s;
+  if(words.length===1) return s.slice(0,9)+'.';
+  const short=words.map(w=>{
+    if(w.length<=3) return w;
+    if(['de','da','do','e','a','o','as','os','em'].includes(w.toLowerCase())) return w;
+    return w.slice(0,5)+(w.length>5?'.':'');
+  }).join(' ');
+  return short.length>14?short.slice(0,13)+'.':short;
+}
+
+const AV_COLORS=['#2563EB','#16A34A','#B45309','#9333EA','#0891B2','#C2410C','#DB2777'];
+const PRI_ORDER={Alta:0,Média:1,Baixa:2};
+
+let data=[];
+let editingId=null,deleteId=null;
+
+async function loadData(){
+  const { data: rows, error } = await db
+    .from('processos')
+    .select('*')
+    .order('id', { ascending: true });
+
+  if(error){
+    console.error('Erro ao carregar:', error);
+    toast('Erro ao carregar dados do Supabase', 'red');
+    return;
+  }
+
+  data = (rows || []).map(row => ({
+    id: row.sei,
+    name: row.nome,
+    resp: row.responsavel,
+    prazo: row.prazo || '',
+    pri: row.prioridade || 'Média',
+    step: row.etapa_atual ?? 0,
+    obs: row.observacoes || '',
+    avatar: row.avatar ?? 0,
+    db_id: row.id
+  }));
+
+  refresh();
+}
+
+async function insertProcess(payload){
+  const { error } = await db.from('processos').insert(payload);
+
+  if(error){
+    console.error('Erro ao inserir:', error);
+    toast('Erro ao salvar no Supabase', 'red');
+    return false;
+  }
+
+  return true;
+}
+
+async function updateProcess(dbId, payload){
+  const { error } = await db
+    .from('processos')
+    .update(payload)
+    .eq('id', dbId);
+
+  if(error){
+    console.error('Erro ao atualizar:', error);
+    toast('Erro ao atualizar no Supabase', 'red');
+    return false;
+  }
+
+  return true;
+}
+
+async function deleteProcess(dbId){
+  const { error } = await db
+    .from('processos')
+    .delete()
+    .eq('id', dbId);
+
+  if(error){
+    console.error('Erro ao excluir:', error);
+    toast('Erro ao excluir no Supabase', 'red');
+    return false;
+  }
+
+  return true;
+}
+
+function parseDate(str){
+  if(!str) return null;
+  const p=str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(p) return new Date(+p[3],+p[2]-1,+p[1]);
+  return null;
+}
+function prazoStatus(str,step){
+  if(step>=STEPS.length-1) return 'done';
+  const d=parseDate(str);
+  if(!d) return 'none';
+  const now=new Date();now.setHours(0,0,0,0);
+  const diff=Math.ceil((d-now)/(1000*60*60*24));
+  if(diff<0) return 'overdue';
+  if(diff<=7) return 'soon';
+  return 'ok';
+}
+function prazoBadge(str,step){
+  const s=prazoStatus(str,step);
+  if(s==='done') return '';
+  if(s==='none') return `<span class="prazo-val" style="color:var(--t2)">${str||'—'}</span>`;
+  if(s==='overdue') return `<span class="prazo-val pb-overdue">⚠ ${str}</span>`;
+  if(s==='soon') return `<span class="prazo-val pb-soon">⏰ ${str}</span>`;
+  return `<span class="prazo-val pb-ok">${str}</span>`;
+}
+
+document.getElementById('title-display').addEventListener('click',startTitleEdit);
+function startTitleEdit(){
+  document.getElementById('title-display').style.display='none';
+  const i=document.getElementById('title-input');
+  i.style.display='inline-block';i.focus();i.select();
+}
+document.getElementById('title-input').addEventListener('blur',finishTitleEdit);
+document.getElementById('title-input').addEventListener('keydown',e=>{if(e.key==='Enter')finishTitleEdit()});
+function finishTitleEdit(){
+  const v=document.getElementById('title-input').value.trim()||'Processos de Compra';
+  document.getElementById('title-input').value=v;
+  document.getElementById('title-display').textContent=v;
+  document.getElementById('title-display').style.display='';
+  document.getElementById('title-input').style.display='none';
+  toast('Título atualizado','blue');
+}
+
+document.getElementById('subtitle-display').addEventListener('click',startSubtitleEdit);
+function startSubtitleEdit(){
+  document.getElementById('subtitle-display').style.display='none';
+  const i=document.getElementById('subtitle-input');
+  i.style.display='inline-block';i.focus();i.select();
+}
+document.getElementById('subtitle-input').addEventListener('blur',finishSubtitleEdit);
+document.getElementById('subtitle-input').addEventListener('keydown',e=>{if(e.key==='Enter')finishSubtitleEdit()});
+function finishSubtitleEdit(){
+  const v=document.getElementById('subtitle-input').value.trim()||'Acompanhamento em tempo real';
+  document.getElementById('subtitle-input').value=v;
+  document.getElementById('subtitle-display').textContent=v;
+  document.getElementById('subtitle-display').style.display='';
+  document.getElementById('subtitle-input').style.display='none';
+  toast('Subtítulo atualizado','blue');
+}
+
+function renderStepLabels(){
+  const row=document.getElementById('step-labels-row');
+  row.innerHTML=STEPS.map(s=>`<span class="step-lbl" title="${s}">${abbr(s)}</span>`).join('');
+}
+
+function updateKPI(){
+  const active=data.filter(d=>d.step<STEPS.length-1).length;
+  const high=data.filter(d=>d.pri==='Alta').length;
+  const done=data.filter(d=>d.step>=STEPS.length-1).length;
+  const avg=data.length?Math.round(data.reduce((s,d)=>s+d.step,0)/data.length/(STEPS.length-1)*100):0;
+  document.getElementById('k-active').textContent=active;
+  document.getElementById('k-high').textContent=high;
+  document.getElementById('k-done').textContent=done;
+  document.getElementById('k-avg').textContent=avg+'%';
+  document.getElementById('k-adelta').textContent=active+' em andamento';
+  document.getElementById('k-hdelta').textContent=high+' críticos';
+  document.getElementById('k-ddelta').textContent=done+' total';
+  document.getElementById('k-avdelta').textContent='média geral';
+}
+
+function populateFilters(){
+  const resps=[...new Set(data.map(d=>d.resp))];
+  const fr=document.getElementById('fresp');
+  const fe=document.getElementById('fetapa');
+  const frv=fr.value,fev=fe.value;
+  fr.innerHTML='<option value="">Responsável</option>'+resps.map(r=>`<option>${r}</option>`).join('');
+  fe.innerHTML='<option value="">Todas as etapas</option>'+STEPS.map(s=>`<option>${s}</option>`).join('');
+  fr.value=frv;fe.value=fev;
+}
+
+function renderTable(){
+  const q=document.getElementById('fsearch').value.toLowerCase();
+  const fe=document.getElementById('fetapa').value;
+  const fp=document.getElementById('fpri').value;
+  const fr=document.getElementById('fresp').value;
+  const fs=document.getElementById('fsort').value;
+  const ini=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const priCls=p=>p==='Alta'?'pri-high':p==='Média'?'pri-med':'pri-low';
+
+  data.forEach(d=>{if(d.step>=STEPS.length)d.step=STEPS.length-1;if(d.step<0)d.step=0});
+
+  let list=data.filter(d=>{
+    if(q&&!d.name.toLowerCase().includes(q)&&!d.id.toLowerCase().includes(q)&&!d.resp.toLowerCase().includes(q)) return false;
+    if(fe&&STEPS[d.step]!==fe) return false;
+    if(fp&&d.pri!==fp) return false;
+    if(fr&&d.resp!==fr) return false;
+    return true;
+  });
+  if(fs==='pri') list.sort((a,b)=>PRI_ORDER[a.pri]-PRI_ORDER[b.pri]);
+  else if(fs==='step') list.sort((a,b)=>b.step-a.step);
+
+  const pct=s=>STEPS.length<=1?100:Math.round(s/(STEPS.length-1)*100);
+
+  function stagStyle(d){
+    if(d.step>=STEPS.length-1) return 'stag-green';
+    const ps=prazoStatus(d.prazo,d.step);
+    if(ps==='overdue') return 'stag-red';
+    if(d.step>=Math.floor(STEPS.length/2)) return 'stag-blue';
+    return 'stag-amber';
+  }
+
+  document.getElementById('tbody').innerHTML=list.map(d=>{
+    const realIdx=data.indexOf(d);
+    const dots=STEPS.map((s,si)=>{
+      const cls=si<d.step?'done':si===d.step?'active':'future';
+      return `<div class="tl-dot ${cls}" data-ridx="${realIdx}" data-si="${si}"><span class="tl-tip">${s}</span></div>`;
+    }).join('');
+    return `<div class="prow">
+      <div class="row-grid">
+        <div class="col-proc">
+          <div class="proc-id">${d.id}</div>
+          <div class="proc-name">${d.name}</div>
+          <span class="stag ${stagStyle(d)}">${STEPS[d.step]}</span>
+        </div>
+        <div class="col-resp">
+          <div style="display:flex;align-items:center;gap:6px">
+            <div class="avatar" style="background:${AV_COLORS[d.avatar]}">${ini(d.resp)}</div>
+            <span class="resp-name">${d.resp}</span>
+          </div>
+        </div>
+        <div class="col-prazo"><div class="prazo-wrap">${prazoBadge(d.prazo,d.step)}</div></div>
+        <div class="col-pri"><span class="pri ${priCls(d.pri)}"><span class="pri-dot"></span>${d.pri}</span></div>
+        <div class="col-tl">
+          <div class="tl-outer">
+            <div class="tl-track"></div>
+            <div class="tl-fill" style="width:${pct(d.step)}%"></div>
+            <div class="tl-dots">${dots}</div>
+          </div>
+        </div>
+        <div class="col-acts">
+          <button class="ab adv" data-id="${d.id}" title="Avançar etapa">▶</button>
+          <button class="ab edit" data-id="${d.id}" title="Editar">✎</button>
+          <button class="ab del" data-id="${d.id}" title="Excluir">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('')||`<div style="padding:32px 16px;text-align:center;color:var(--t2);font-size:13px">Nenhum processo encontrado com os filtros aplicados.</div>`;
+
+  document.getElementById('tcount').textContent=list.length+' processo'+(list.length!==1?'s':'')+' exibido'+(list.length!==1?'s':'');
+
+  document.querySelectorAll('.ab.adv').forEach(b=>b.onclick=()=>advStep(b.dataset.id));
+  document.querySelectorAll('.ab.edit').forEach(b=>b.onclick=()=>openModal(b.dataset.id));
+  document.querySelectorAll('.ab.del').forEach(b=>b.onclick=()=>askDelete(b.dataset.id));
+  document.querySelectorAll('.tl-dot').forEach(dot=>{
+    dot.onclick=async ()=>{
+      const ri=parseInt(dot.dataset.ridx);
+      const si=parseInt(dot.dataset.si);
+      const item=data[ri];
+      if(!item) return;
+
+      const success=await updateProcess(item.db_id,{
+        etapa_atual:si
+      });
+
+      if(!success) return;
+
+      await loadData();
+      toast('Etapa atualizada: '+STEPS[si],'blue');
+    };
+  });
+}
+
+async function advStep(id){
+  const d=data.find(x=>x.id===id);
+  if(!d) return;
+  if(d.step>=STEPS.length-1){toast('Processo já concluído','green');return;}
+
+  const newStep=d.step+1;
+  const success=await updateProcess(d.db_id,{
+    etapa_atual:newStep
+  });
+
+  if(!success) return;
+
+  await loadData();
+  toast('Etapa avançada: '+STEPS[newStep],'green');
+}
+
+function openModal(id){
+  editingId=id;
+  const d=id?data.find(x=>x.id===id):null;
+  document.getElementById('modal-title').textContent=d?'Editar produto':'Novo processo';
+  document.getElementById('f-name').value=d?d.name:'';
+  document.getElementById('f-id').value=d?d.id:'';
+  document.getElementById('f-prazo').value=d?d.prazo:'';
+  document.getElementById('f-resp').value=d?d.resp:'';
+  document.getElementById('f-pri').value=d?d.pri:'Média';
+  document.getElementById('f-obs').value=d?d.obs:'';
+  const ss=document.getElementById('f-step');
+  ss.innerHTML=STEPS.map((s,i)=>`<option value="${i}"${d&&d.step===i?' selected':''}>${i+1}. ${s}</option>`).join('');
+  ['name','id','resp'].forEach(f=>document.getElementById('e-'+f).classList.remove('show'));
+  document.getElementById('overlay').style.display='flex';
+  setTimeout(()=>document.getElementById('f-name').focus(),80);
+}
+function closeModal(){document.getElementById('overlay').style.display='none';editingId=null}
+function overlayClickProc(e){if(e.target===document.getElementById('overlay'))closeModal()}
+
+async function saveModal(){
+  const name=document.getElementById('f-name').value.trim();
+  const id=document.getElementById('f-id').value.trim();
+  const resp=document.getElementById('f-resp').value.trim();
+  let ok=true;
+  if(!name){document.getElementById('e-name').classList.add('show');ok=false}else{document.getElementById('e-name').classList.remove('show')}
+  if(!id){document.getElementById('e-id').classList.add('show');ok=false}else{document.getElementById('e-id').classList.remove('show')}
+  if(!resp){document.getElementById('e-resp').classList.add('show');ok=false}else{document.getElementById('e-resp').classList.remove('show')}
+  if(!ok) return;
+  const prazo=document.getElementById('f-prazo').value.trim();
+  const pri=document.getElementById('f-pri').value;
+  const step=parseInt(document.getElementById('f-step').value);
+  const obs=document.getElementById('f-obs').value.trim();
+
+  if(editingId){
+    const current=data.find(x=>x.id===editingId);
+    if(!current) return;
+
+    const success=await updateProcess(current.db_id,{
+      sei:id,
+      nome:name,
+      responsavel:resp,
+      prazo:prazo,
+      prioridade:pri,
+      etapa_atual:step,
+      observacoes:obs
+    });
+
+    if(!success) return;
+    toast('Processo atualizado','blue');
+  } else {
+    const success=await insertProcess({
+      sei:id,
+      nome:name,
+      responsavel:resp,
+      prazo:prazo,
+      prioridade:pri,
+      etapa_atual:step,
+      observacoes:obs,
+      avatar:data.length%AV_COLORS.length
+    });
+
+    if(!success) return;
+    toast('Processo criado','green');
+  }
+  closeModal();
+  await loadData();
+}
+
+function askDelete(id){
+  deleteId=id;
+  const d=data.find(x=>x.id===id);
+  document.getElementById('confirm-msg').textContent=(d?`"${d.name}"`:'Este processo')+' será removido permanentemente.';
+  document.getElementById('confirm-overlay').style.display='flex';
+}
+function closeConfirm(){document.getElementById('confirm-overlay').style.display='none';deleteId=null}
+async function confirmDelete(){
+  if(!deleteId) return;
+
+  const current=data.find(x=>x.id===deleteId);
+  if(!current) return;
+
+  const success=await deleteProcess(current.db_id);
+  if(!success) return;
+
+  closeConfirm();
+  await loadData();
+  toast('Processo removido','red');
+}
+
+function openStepsManager(){
+  tempSteps=[...STEPS];
+  renderStepsList();
+  document.getElementById('steps-overlay').style.display='flex';
+}
+function closeStepsManager(){document.getElementById('steps-overlay').style.display='none';tempSteps=[]}
+function overlayClickSteps(e){if(e.target===document.getElementById('steps-overlay'))closeStepsManager()}
+
+function renderStepsList(){
+  const el=document.getElementById('steps-list');
+  el.innerHTML=tempSteps.map((s,i)=>`
+    <div class="step-item" data-i="${i}">
+      <span class="step-num">${i+1}</span>
+      <input value="${s.replace(/"/g,'&quot;')}" onchange="tempSteps[${i}]=this.value" placeholder="Nome da etapa">
+      <button class="step-del" onclick="removeStepItem(${i})" title="Remover etapa">✕</button>
+    </div>
+  `).join('');
+}
+function addStepItem(){
+  tempSteps.push('Nova etapa');
+  renderStepsList();
+  const inputs=document.getElementById('steps-list').querySelectorAll('input');
+  const last=inputs[inputs.length-1];
+  if(last){last.focus();last.select();}
+}
+function removeStepItem(i){
+  if(tempSteps.length<=1){toast('É necessário pelo menos 1 etapa','amber');return;}
+  tempSteps.splice(i,1);
+  renderStepsList();
+}
+function saveSteps(){
+  document.getElementById('steps-list').querySelectorAll('input').forEach((inp,i)=>{tempSteps[i]=inp.value.trim()||tempSteps[i]});
+  STEPS=[...tempSteps];
+  data.forEach(d=>{if(d.step>=STEPS.length)d.step=STEPS.length-1});
+  closeStepsManager();
+  refresh();
+  toast('Etapas atualizadas ('+STEPS.length+')','green');
+}
+
+function exportCSV(){
+  const headers=['Processo SEI','Nome','Responsável','Prioridade','Prazo','Etapa atual','Progresso %','Observações'];
+  const rows=data.map(d=>[d.id,d.name,d.resp,d.pri,d.prazo||'',STEPS[d.step]||'',Math.round(d.step/(STEPS.length-1)*100)+'%',d.obs||'']);
+  const csv=[headers,...rows].map(r=>r.map(c=>'"'+(c||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='processos-compra.csv';a.click();URL.revokeObjectURL(url);
+  toast('CSV exportado','green');
+}
+
+function toast(msg,type='blue'){
+  const ic=type==='green'?'✓':type==='red'?'✕':type==='amber'?'!':'i';
+  const el=document.createElement('div');
+  el.className=`toast t-${type}`;
+  el.innerHTML=`<div class="toast-ic">${ic}</div><span>${msg}</span>`;
+  document.getElementById('toast-wrap').appendChild(el);
+  setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),220)},2800);
+}
+
+function refresh(){updateKPI();populateFilters();renderStepLabels();renderTable();}
+loadData();
+</script>
+
+</body>
+</html>
