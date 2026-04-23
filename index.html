@@ -12,15 +12,17 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#FFFFFF;--surface:#FFFFFF;--surface2:#F8F9FB;
+  --bg:#F2F4F7;--surface:#FFFFFF;--surface2:#F8F9FB;
   --bd:rgba(0,0,0,0.08);--bd2:rgba(0,0,0,0.14);
-  --t1:#111827;--t2:#6B7280;
+  --t1:var(--color-text-primary);--t2:var(--color-text-secondary);
   --blue:#2563EB;--blue-bg:#EFF4FF;
   --green:#16A34A;--green-bg:#F0FDF4;
   --amber:#B45309;--amber-bg:#FFFBEB;
   --red:#DC2626;--red-bg:#FEF2F2;
   --r:10px;
 }
+@media(prefers-color-scheme:dark){
+  :root{--bg:#0D1117;--surface:#161B27;--surface2:#1C2333;--bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.14);--blue-bg:#1E3A6E;--green-bg:#14291F;--amber-bg:#2D1F07;--red-bg:#2D0A0A}
 }
 body{background:var(--bg);font-family:var(--font-sans);font-size:13px;color:var(--t1);min-height:100vh}
 .wrap{max-width:1280px;margin:0 auto;padding:20px 24px 48px}
@@ -299,6 +301,46 @@ let STEPS=[
 ];
 let tempSteps=[];
 
+const STORAGE_KEYS = {
+  title: 'painel_title',
+  subtitle: 'painel_subtitle',
+  steps: 'painel_steps'
+};
+
+function savePanelSettings(){
+  localStorage.setItem(STORAGE_KEYS.title, document.getElementById('title-display').textContent || 'Processos de Compra de Alimentos');
+  localStorage.setItem(STORAGE_KEYS.subtitle, document.getElementById('subtitle-display').textContent || 'Acompanhamento em tempo real · Alimentos & Insumos');
+  localStorage.setItem(STORAGE_KEYS.steps, JSON.stringify(STEPS));
+}
+
+function loadPanelSettings(){
+  const savedTitle = localStorage.getItem(STORAGE_KEYS.title);
+  const savedSubtitle = localStorage.getItem(STORAGE_KEYS.subtitle);
+  const savedSteps = localStorage.getItem(STORAGE_KEYS.steps);
+
+  if(savedTitle){
+    document.getElementById('title-display').textContent = savedTitle;
+    document.getElementById('title-input').value = savedTitle;
+  }
+
+  if(savedSubtitle){
+    document.getElementById('subtitle-display').textContent = savedSubtitle;
+    document.getElementById('subtitle-input').value = savedSubtitle;
+  }
+
+  if(savedSteps){
+    try{
+      const parsed = JSON.parse(savedSteps);
+      if(Array.isArray(parsed) && parsed.length > 0){
+        STEPS = parsed;
+      }
+    } catch(e){
+      console.error('Erro ao carregar etapas salvas:', e);
+    }
+  }
+}
+
+
 function abbr(s){
   const words=s.split(' ');
   if(s.length<=10) return s;
@@ -425,6 +467,7 @@ function finishTitleEdit(){
   document.getElementById('title-display').textContent=v;
   document.getElementById('title-display').style.display='';
   document.getElementById('title-input').style.display='none';
+  savePanelSettings();
   toast('Título atualizado','blue');
 }
 
@@ -442,6 +485,7 @@ function finishSubtitleEdit(){
   document.getElementById('subtitle-display').textContent=v;
   document.getElementById('subtitle-display').style.display='';
   document.getElementById('subtitle-input').style.display='none';
+  savePanelSettings();
   toast('Subtítulo atualizado','blue');
 }
 
@@ -708,6 +752,7 @@ function saveSteps(){
   data.forEach(d=>{if(d.step>=STEPS.length)d.step=STEPS.length-1});
   closeStepsManager();
   refresh();
+  savePanelSettings();
   toast('Etapas atualizadas ('+STEPS.length+')','green');
 }
 
@@ -731,6 +776,7 @@ function toast(msg,type='blue'){
 }
 
 function refresh(){updateKPI();populateFilters();renderStepLabels();renderTable();}
+loadPanelSettings();
 loadData();
 </script>
 
