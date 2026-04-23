@@ -12,17 +12,15 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#F2F4F7;--surface:#FFFFFF;--surface2:#F8F9FB;
+  --bg:#FFFFFF;--surface:#FFFFFF;--surface2:#F8F9FB;
   --bd:rgba(0,0,0,0.08);--bd2:rgba(0,0,0,0.14);
-  --t1:var(--color-text-primary);--t2:var(--color-text-secondary);
+  --t1:#111827;--t2:#6B7280;
   --blue:#2563EB;--blue-bg:#EFF4FF;
   --green:#16A34A;--green-bg:#F0FDF4;
   --amber:#B45309;--amber-bg:#FFFBEB;
   --red:#DC2626;--red-bg:#FEF2F2;
   --r:10px;
 }
-@media(prefers-color-scheme:dark){
-  :root{--bg:#0D1117;--surface:#161B27;--surface2:#1C2333;--bd:rgba(255,255,255,0.08);--bd2:rgba(255,255,255,0.14);--blue-bg:#1E3A6E;--green-bg:#14291F;--amber-bg:#2D1F07;--red-bg:#2D0A0A}
 }
 body{background:var(--bg);font-family:var(--font-sans);font-size:13px;color:var(--t1);min-height:100vh}
 .wrap{max-width:1280px;margin:0 auto;padding:20px 24px 48px}
@@ -301,43 +299,108 @@ let STEPS=[
 ];
 let tempSteps=[];
 
-const STORAGE_KEYS = {
-  title: 'painel_title',
-  subtitle: 'painel_subtitle',
-  steps: 'painel_steps'
-};
+let settingsLoaded = false;
+let realtimeStarted = false;
 
-function savePanelSettings(){
-  localStorage.setItem(STORAGE_KEYS.title, document.getElementById('title-display').textContent || 'Processos de Compra de Alimentos');
-  localStorage.setItem(STORAGE_KEYS.subtitle, document.getElementById('subtitle-display').textContent || 'Acompanhamento em tempo real · Alimentos & Insumos');
-  localStorage.setItem(STORAGE_KEYS.steps, JSON.stringify(STEPS));
-}
+async function ensureSettingsRow(){
+  const { data: existing, error } = await db
+    .from('painel_configuracoes')
+    .select('id')
+    .eq('id', 1)
+    .maybeSingle();
 
-function loadPanelSettings(){
-  const savedTitle = localStorage.getItem(STORAGE_KEYS.title);
-  const savedSubtitle = localStorage.getItem(STORAGE_KEYS.subtitle);
-  const savedSteps = localStorage.getItem(STORAGE_KEYS.steps);
-
-  if(savedTitle){
-    document.getElementById('title-display').textContent = savedTitle;
-    document.getElementById('title-input').value = savedTitle;
+  if(error){
+    console.error('Erro ao verificar configuracoes:', error);
+    toast('Erro ao verificar configuracoes', 'red');
+    return false;
   }
 
-  if(savedSubtitle){
-    document.getElementById('subtitle-display').textContent = savedSubtitle;
-    document.getElementById('subtitle-input').value = savedSubtitle;
-  }
+  if(!existing){
+    const { error: insertError } = await db
+      .from('painel_configuracoes')
+      .insert({
+        id: 1,
+        titulo: 'Processos de Compra de Alimentos',
+        subtitulo: 'Acompanhamento em tempo real · Alimentos & Insumos',
+        etapas: STEPS
+      });
 
-  if(savedSteps){
-    try{
-      const parsed = JSON.parse(savedSteps);
-      if(Array.isArray(parsed) && parsed.length > 0){
-        STEPS = parsed;
-      }
-    } catch(e){
-      console.error('Erro ao carregar etapas salvas:', e);
+    if(insertError){
+      console.error('Erro ao criar configuracoes iniciais:', insertError);
+      toast('Erro ao criar configuracoes iniciais', 'red');
+      return false;
     }
   }
+
+  return true;
+}
+
+async function loadPanelSettings(){
+  const ok = await ensureSettingsRow();
+  if(!ok) return;
+
+  const { data: cfg, error } = await db
+    .from('painel_configuracoes')
+    .select('*')
+    .eq('id', 1)
+    .maybeSingle();
+
+  if(error){
+    console.error('Erro ao carregar configuracoes:', error);
+    toast('Erro ao carregar configuracoes', 'red');
+    return;
+  }
+
+  if(cfg){
+    const titulo = cfg.titulo || 'Processos de Compra de Alimentos';
+    const subtitulo = cfg.subtitulo || 'Acompanhamento em tempo real · Alimentos & Insumos';
+    const etapas = Array.isArray(cfg.etapas) && cfg.etapas.length ? cfg.etapas : STEPS;
+
+    document.getElementById('title-display').textContent = titulo;
+    document.getElementById('title-input').value = titulo;
+    document.getElementById('subtitle-display').textContent = subtitulo;
+    document.getElementById('subtitle-input').value = subtitulo;
+    STEPS = etapas;
+    settingsLoaded = true;
+  }
+}
+
+async function savePanelSettings(){
+  if(!settingsLoaded) return;
+
+  const payload = {
+    id: 1,
+    titulo: document.getElementById('title-display').textContent || 'Processos de Compra de Alimentos',
+    subtitulo: document.getElementById('subtitle-display').textContent || 'Acompanhamento em tempo real · Alimentos & Insumos',
+    etapas: STEPS
+  };
+
+  const { error } = await db
+    .from('painel_configuracoes')
+    .upsert(payload, { onConflict: 'id' });
+
+  if(error){
+    console.error('Erro ao salvar configuracoes:', error);
+    toast('Erro ao salvar configuracoes', 'red');
+  }
+}
+
+function startRealtime(){
+  if(realtimeStarted) return;
+  realtimeStarted = true;
+
+  db.channel('processos-sync')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'processos' }, async () => {
+      await loadData();
+    })
+    .subscribe();
+
+  db.channel('config-sync')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'painel_configuracoes' }, async () => {
+      await loadPanelSettings();
+      refresh();
+    })
+    .subscribe();
 }
 
 
@@ -461,13 +524,13 @@ function startTitleEdit(){
 }
 document.getElementById('title-input').addEventListener('blur',finishTitleEdit);
 document.getElementById('title-input').addEventListener('keydown',e=>{if(e.key==='Enter')finishTitleEdit()});
-function finishTitleEdit(){
+async function finishTitleEdit(){
   const v=document.getElementById('title-input').value.trim()||'Processos de Compra';
   document.getElementById('title-input').value=v;
   document.getElementById('title-display').textContent=v;
   document.getElementById('title-display').style.display='';
   document.getElementById('title-input').style.display='none';
-  savePanelSettings();
+  await savePanelSettings();
   toast('Título atualizado','blue');
 }
 
@@ -479,13 +542,13 @@ function startSubtitleEdit(){
 }
 document.getElementById('subtitle-input').addEventListener('blur',finishSubtitleEdit);
 document.getElementById('subtitle-input').addEventListener('keydown',e=>{if(e.key==='Enter')finishSubtitleEdit()});
-function finishSubtitleEdit(){
+async function finishSubtitleEdit(){
   const v=document.getElementById('subtitle-input').value.trim()||'Acompanhamento em tempo real';
   document.getElementById('subtitle-input').value=v;
   document.getElementById('subtitle-display').textContent=v;
   document.getElementById('subtitle-display').style.display='';
   document.getElementById('subtitle-input').style.display='none';
-  savePanelSettings();
+  await savePanelSettings();
   toast('Subtítulo atualizado','blue');
 }
 
@@ -611,7 +674,7 @@ function renderTable(){
   });
 }
 
-async function advStep(id){
+async async function advStep(id){
   const d=data.find(x=>x.id===id);
   if(!d) return;
   if(d.step>=STEPS.length-1){toast('Processo já concluído','green');return;}
@@ -646,7 +709,7 @@ function openModal(id){
 function closeModal(){document.getElementById('overlay').style.display='none';editingId=null}
 function overlayClickProc(e){if(e.target===document.getElementById('overlay'))closeModal()}
 
-async function saveModal(){
+async async function saveModal(){
   const name=document.getElementById('f-name').value.trim();
   const id=document.getElementById('f-id').value.trim();
   const resp=document.getElementById('f-resp').value.trim();
@@ -702,7 +765,7 @@ function askDelete(id){
   document.getElementById('confirm-overlay').style.display='flex';
 }
 function closeConfirm(){document.getElementById('confirm-overlay').style.display='none';deleteId=null}
-async function confirmDelete(){
+async async function confirmDelete(){
   if(!deleteId) return;
 
   const current=data.find(x=>x.id===deleteId);
@@ -746,13 +809,13 @@ function removeStepItem(i){
   tempSteps.splice(i,1);
   renderStepsList();
 }
-function saveSteps(){
+async function saveSteps(){
   document.getElementById('steps-list').querySelectorAll('input').forEach((inp,i)=>{tempSteps[i]=inp.value.trim()||tempSteps[i]});
   STEPS=[...tempSteps];
   data.forEach(d=>{if(d.step>=STEPS.length)d.step=STEPS.length-1});
   closeStepsManager();
   refresh();
-  savePanelSettings();
+  await savePanelSettings();
   toast('Etapas atualizadas ('+STEPS.length+')','green');
 }
 
@@ -776,8 +839,12 @@ function toast(msg,type='blue'){
 }
 
 function refresh(){updateKPI();populateFilters();renderStepLabels();renderTable();}
-loadPanelSettings();
-loadData();
+
+(async function init(){
+  await loadPanelSettings();
+  await loadData();
+  startRealtime();
+})();
 </script>
 
 </body>
