@@ -21,7 +21,6 @@
   --red:#DC2626;--red-bg:#FEF2F2;
   --r:10px;
 }
-}
 body{background:var(--bg);font-family:var(--font-sans);font-size:13px;color:var(--t1);min-height:100vh}
 .wrap{max-width:1280px;margin:0 auto;padding:20px 24px 48px}
 .hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;gap:12px}
@@ -674,7 +673,7 @@ function renderTable(){
   });
 }
 
-async async function advStep(id){
+async function advStep(id){
   const d=data.find(x=>x.id===id);
   if(!d) return;
   if(d.step>=STEPS.length-1){toast('Processo já concluído','green');return;}
@@ -709,7 +708,7 @@ function openModal(id){
 function closeModal(){document.getElementById('overlay').style.display='none';editingId=null}
 function overlayClickProc(e){if(e.target===document.getElementById('overlay'))closeModal()}
 
-async async function saveModal(){
+async function saveModal(){
   const name=document.getElementById('f-name').value.trim();
   const id=document.getElementById('f-id').value.trim();
   const resp=document.getElementById('f-resp').value.trim();
@@ -765,7 +764,7 @@ function askDelete(id){
   document.getElementById('confirm-overlay').style.display='flex';
 }
 function closeConfirm(){document.getElementById('confirm-overlay').style.display='none';deleteId=null}
-async async function confirmDelete(){
+async function confirmDelete(){
   if(!deleteId) return;
 
   const current=data.find(x=>x.id===deleteId);
