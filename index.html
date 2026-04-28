@@ -641,9 +641,9 @@ function renderTable(){
           </div>
         </div>
         <div class="col-acts">
-          <button class="ab adv" data-id="${d.id}" title="Avançar etapa">▶</button>
-          <button class="ab edit" data-id="${d.id}" title="Editar">✎</button>
-          <button class="ab del" data-id="${d.id}" title="Excluir">✕</button>
+          <button class="ab adv" data-id="${d.db_id}" title="Avançar etapa">▶</button>
+          <button class="ab edit" data-id="${d.db_id}" title="Editar">✎</button>
+          <button class="ab del" data-id="${d.db_id}" title="Excluir">✕</button>
         </div>
       </div>
     </div>`;
@@ -673,8 +673,8 @@ function renderTable(){
   });
 }
 
-async function advStep(id){
-  const d=data.find(x=>x.id===id);
+async function advStep(dbId){
+  const d=data.find(x=>String(x.db_id)===String(dbId));
   if(!d) return;
   if(d.step>=STEPS.length-1){toast('Processo já concluído','green');return;}
 
@@ -689,9 +689,9 @@ async function advStep(id){
   toast('Etapa avançada: '+STEPS[newStep],'green');
 }
 
-function openModal(id){
-  editingId=id;
-  const d=id?data.find(x=>x.id===id):null;
+function openModal(dbId){
+  editingId=dbId;
+  const d=dbId?data.find(x=>String(x.db_id)===String(dbId)):null;
   document.getElementById('modal-title').textContent=d?'Editar produto':'Novo processo';
   document.getElementById('f-name').value=d?d.name:'';
   document.getElementById('f-id').value=d?d.id:'';
@@ -723,7 +723,7 @@ async function saveModal(){
   const obs=document.getElementById('f-obs').value.trim();
 
   if(editingId){
-    const current=data.find(x=>x.id===editingId);
+    const current=data.find(x=>String(x.db_id)===String(editingId));
     if(!current) return;
 
     const success=await updateProcess(current.db_id,{
@@ -757,9 +757,9 @@ async function saveModal(){
   await loadData();
 }
 
-function askDelete(id){
-  deleteId=id;
-  const d=data.find(x=>x.id===id);
+function askDelete(dbId){
+  deleteId=dbId;
+  const d=data.find(x=>String(x.db_id)===String(dbId));
   document.getElementById('confirm-msg').textContent=(d?`"${d.name}"`:'Este processo')+' será removido permanentemente.';
   document.getElementById('confirm-overlay').style.display='flex';
 }
@@ -767,7 +767,7 @@ function closeConfirm(){document.getElementById('confirm-overlay').style.display
 async function confirmDelete(){
   if(!deleteId) return;
 
-  const current=data.find(x=>x.id===deleteId);
+  const current=data.find(x=>String(x.db_id)===String(deleteId));
   if(!current) return;
 
   const success=await deleteProcess(current.db_id);
