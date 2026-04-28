@@ -64,7 +64,7 @@ body{background:var(--bg);font-family:var(--font-sans);font-size:13px;color:var(
 .srch input:focus{border-color:var(--blue)}
 select.fsel{padding:6px 10px;border-radius:7px;border:1px solid var(--bd);background:var(--surface2);font-size:12.5px;color:var(--t1);outline:none;cursor:pointer}
 select.fsel:focus{border-color:var(--blue)}
-.tcard{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden}
+.tcard{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);overflow:visible}
 .row-grid{display:flex;align-items:stretch;min-height:64px}
 .col-proc{width:220px;flex-shrink:0;padding:12px 14px 12px 16px;border-right:1px solid var(--bd)}
 .col-resp{width:150px;flex-shrink:0;padding:12px 14px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center}
@@ -73,7 +73,7 @@ select.fsel:focus{border-color:var(--blue)}
 .col-tl{flex:1;min-width:0;padding:10px 16px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center;overflow:visible;position:relative}
 .col-acts{width:88px;flex-shrink:0;padding:12px 10px;display:flex;align-items:center;justify-content:flex-end;gap:4px;position:relative;z-index:20}
 /* THEAD — todas as colunas com alinhamento centralizado idêntico à col-pri */
-.thead-row{display:flex;background:var(--surface2);border-bottom:1px solid var(--bd)}
+.thead-row{display:flex;background:var(--surface2);border-bottom:1px solid var(--bd);position:relative;z-index:1}
 .th{font-size:10.5px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
 .thead-row .col-proc{display:flex;align-items:center;justify-content:center;padding:10px 14px}
 .thead-row .col-resp{display:flex;align-items:center;justify-content:center;padding:10px 14px}
@@ -84,9 +84,9 @@ select.fsel:focus{border-color:var(--blue)}
 .step-labels-row{display:flex;justify-content:space-between;padding:0 0 6px;width:100%;gap:2px}
 .step-lbl{font-size:8px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.2px;text-align:center;flex:1;cursor:default;line-height:1.3;overflow:hidden;padding:0 1px;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-height:2.6em}
 .step-lbl:hover{color:var(--blue)}
-.prow{border-bottom:1px solid var(--bd);transition:background .12s}
+.prow{border-bottom:1px solid var(--bd);transition:background .12s;position:relative}
 .prow:last-child{border-bottom:none}
-.prow:hover{background:rgba(37,99,235,.025)}
+.prow:hover{background:rgba(37,99,235,.025);z-index:30}
 .proc-id{font-size:10px;color:var(--t2);font-family:var(--font-mono);margin-bottom:2px;letter-spacing:.3px}
 .proc-name{font-size:12.5px;font-weight:600;letter-spacing:-0.2px;line-height:1.3;word-break:break-word}
 .stag{font-size:9.5px;padding:2px 6px;border-radius:4px;font-weight:500;margin-top:4px;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -301,6 +301,9 @@ let tempSteps=[];
 
 let settingsLoaded=false;
 let realtimeStarted=false;
+let settingsSaveQueue=Promise.resolve();
+let titleSaving=false;
+let subtitleSaving=false;
 
 async function ensureSettingsRow(){
   const { data: existing, error } = await db
@@ -326,7 +329,7 @@ async function ensureSettingsRow(){
 
   const { error: insertError } = await db
     .from('painel_configuracoes')
-    .upsert(payload, { onConflict: 'id' });
+    .insert(payload);
 
   if(insertError){
     console.error('Erro ao criar configuracoes iniciais:', insertError);
@@ -367,24 +370,110 @@ async function loadPanelSettings(){
   }
 }
 
-async function savePanelSettings(){
-  if(!settingsLoaded) return;
-
-  const payload = {
-    id: 1,
-    titulo: document.getElementById('title-display').textContent || 'Processos de Compra de Alimentos',
-    subtitulo: document.getElementById('subtitle-display').textContent || 'Acompanhamento em tempo real · Alimentos & Insumos',
-    etapas: STEPS
-  };
-
-  const { error } = await db
+async function getPanelConfigRow(){
+  const { data, error } = await db
     .from('painel_configuracoes')
-    .upsert(payload, { onConflict: 'id' });
+    .select('*')
+    .eq('id', 1)
+    .maybeSingle();
 
   if(error){
-    console.error('Erro ao salvar configuracoes:', error);
-    toast('Erro ao salvar configuracoes', 'red');
+    console.error('Erro ao buscar configuracoes:', error);
+    return null;
   }
+
+  return data;
+}
+
+async function savePanelSettings(overrides={}){
+  if(!settingsLoaded) return;
+
+  settingsSaveQueue = settingsSaveQueue.then(async () => {
+    const current = await getPanelConfigRow();
+
+    const payload = {
+      id: 1,
+      titulo: overrides.titulo ?? current?.titulo ?? document.getElementById('title-display').textContent ?? 'Processos de Compra de Alimentos',
+      subtitulo: overrides.subtitulo ?? current?.subtitulo ?? document.getElementById('subtitle-display').textContent ?? 'Acompanhamento em tempo real · Alimentos & Insumos',
+      etapas: overrides.etapas ?? current?.etapas ?? STEPS,
+      atualizado_em: new Date().toISOString()
+    };
+
+    const { error } = await db
+      .from('painel_configuracoes')
+      .upsert(payload, { onConflict: 'id' });
+
+    if(error){
+      console.error('Erro ao salvar configuracoes:', error);
+      toast('Erro ao salvar configuracoes', 'red');
+    }
+  });
+
+  return settingsSaveQueue;
+}
+
+async function saveTitleValue(titulo){
+  settingsSaveQueue = settingsSaveQueue.then(async () => {
+    const current = await getPanelConfigRow();
+
+    const payload = {
+      id: 1,
+      titulo,
+      subtitulo: current?.subtitulo ?? document.getElementById('subtitle-display').textContent ?? 'Acompanhamento em tempo real · Alimentos & Insumos',
+      etapas: current?.etapas ?? STEPS,
+      atualizado_em: new Date().toISOString()
+    };
+
+    const { data, error } = await db
+      .from('painel_configuracoes')
+      .upsert(payload, { onConflict: 'id' })
+      .select()
+      .maybeSingle();
+
+    if(error){
+      console.error('Erro ao salvar titulo:', error);
+      toast('Erro ao salvar titulo', 'red');
+      return;
+    }
+
+    const finalTitulo = data?.titulo ?? titulo;
+    document.getElementById('title-display').textContent = finalTitulo;
+    document.getElementById('title-input').value = finalTitulo;
+  });
+
+  return settingsSaveQueue;
+}
+
+async function saveSubtitleValue(subtitulo){
+  settingsSaveQueue = settingsSaveQueue.then(async () => {
+    const current = await getPanelConfigRow();
+
+    const payload = {
+      id: 1,
+      titulo: current?.titulo ?? document.getElementById('title-display').textContent ?? 'Processos de Compra de Alimentos',
+      subtitulo,
+      etapas: current?.etapas ?? STEPS,
+      atualizado_em: new Date().toISOString()
+    };
+
+    const { data, error } = await db
+      .from('painel_configuracoes')
+      .upsert(payload, { onConflict: 'id' })
+      .select()
+      .maybeSingle();
+
+    if(error){
+      console.error('Erro ao salvar subtitulo:', error);
+      toast('Erro ao salvar subtitulo', 'red');
+      return;
+    }
+
+    const finalSubtitulo = data?.subtitulo ?? subtitulo;
+    document.getElementById('subtitle-display').textContent = finalSubtitulo;
+    document.getElementById('subtitle-input').value = finalSubtitulo;
+  });
+
+  return settingsSaveQueue;
 }
 
 function startRealtime(){
@@ -399,6 +488,7 @@ function startRealtime(){
 
   db.channel('config-sync')
     .on('postgres_changes', { event: '*', schema: 'public', table: 'painel_configuracoes' }, async () => {
+      if(titleSaving || subtitleSaving) return;
       await loadPanelSettings();
       refresh();
     })
@@ -527,13 +617,25 @@ function startTitleEdit(){
 document.getElementById('title-input').addEventListener('blur',finishTitleEdit);
 document.getElementById('title-input').addEventListener('keydown',e=>{if(e.key==='Enter')finishTitleEdit()});
 async function finishTitleEdit(){
-  const v=document.getElementById('title-input').value.trim()||'Processos de Compra de Alimentos';
-  document.getElementById('title-input').value=v;
-  document.getElementById('title-display').textContent=v;
-  document.getElementById('title-display').style.display='';
-  document.getElementById('title-input').style.display='none';
-  await savePanelSettings();
-  toast('Título atualizado','blue');
+  if(titleSaving) return;
+  titleSaving=true;
+
+  try{
+    const input=document.getElementById('title-input');
+    const display=document.getElementById('title-display');
+    const v=input.value.trim()||'Processos de Compra de Alimentos';
+
+    input.value=v;
+    display.textContent=v;
+    display.style.display='';
+    input.style.display='none';
+
+    await ensureSettingsRow();
+    await saveTitleValue(v);
+    toast('Título atualizado','blue');
+  } finally {
+    titleSaving=false;
+  }
 }
 
 document.getElementById('subtitle-display').addEventListener('click',startSubtitleEdit);
@@ -545,13 +647,25 @@ function startSubtitleEdit(){
 document.getElementById('subtitle-input').addEventListener('blur',finishSubtitleEdit);
 document.getElementById('subtitle-input').addEventListener('keydown',e=>{if(e.key==='Enter')finishSubtitleEdit()});
 async function finishSubtitleEdit(){
-  const v=document.getElementById('subtitle-input').value.trim()||'Acompanhamento em tempo real · Alimentos & Insumos';
-  document.getElementById('subtitle-input').value=v;
-  document.getElementById('subtitle-display').textContent=v;
-  document.getElementById('subtitle-display').style.display='';
-  document.getElementById('subtitle-input').style.display='none';
-  await savePanelSettings();
-  toast('Subtítulo atualizado','blue');
+  if(subtitleSaving) return;
+  subtitleSaving=true;
+
+  try{
+    const input=document.getElementById('subtitle-input');
+    const display=document.getElementById('subtitle-display');
+    const v=input.value.trim()||'Acompanhamento em tempo real · Alimentos & Insumos';
+
+    input.value=v;
+    display.textContent=v;
+    display.style.display='';
+    input.style.display='none';
+
+    await ensureSettingsRow();
+    await saveSubtitleValue(v);
+    toast('Subtítulo atualizado','blue');
+  } finally {
+    subtitleSaving=false;
+  }
 }
 
 function renderStepLabels(){
@@ -664,9 +778,9 @@ function renderTable(){
 
   document.getElementById('tcount').textContent=list.length+' processo'+(list.length!==1?'s':'')+' exibido'+(list.length!==1?'s':'');
 
-  document.querySelectorAll('.ab.adv').forEach(b=>b.onclick=()=>advStep(b.dataset.id));
-  document.querySelectorAll('.ab.edit').forEach(b=>b.onclick=()=>openModal(b.dataset.id));
-  document.querySelectorAll('.ab.del').forEach(b=>b.onclick=()=>askDelete(b.dataset.id));
+  document.querySelectorAll('.ab.adv').forEach(b=>b.onclick=(e)=>{e.preventDefault();e.stopPropagation();advStep(b.dataset.id);});
+  document.querySelectorAll('.ab.edit').forEach(b=>b.onclick=(e)=>{e.preventDefault();e.stopPropagation();openModal(b.dataset.id);});
+  document.querySelectorAll('.ab.del').forEach(b=>b.onclick=(e)=>{e.preventDefault();e.stopPropagation();askDelete(b.dataset.id);});
   document.querySelectorAll('.tl-dot').forEach(dot=>{
     dot.onclick=async ()=>{
       const ri=parseInt(dot.dataset.ridx);
