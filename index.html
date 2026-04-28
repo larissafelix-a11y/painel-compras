@@ -71,7 +71,7 @@ select.fsel:focus{border-color:var(--blue)}
 .col-prazo{width:120px;flex-shrink:0;padding:12px 14px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center}
 .col-pri{width:90px;flex-shrink:0;padding:12px 14px;border-right:1px solid var(--bd);display:flex;align-items:center;justify-content:center}
 .col-tl{flex:1;min-width:0;padding:10px 16px;border-right:1px solid var(--bd);display:flex;flex-direction:column;justify-content:center;overflow:visible;position:relative}
-.col-acts{width:88px;flex-shrink:0;padding:12px 10px;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+.col-acts{width:88px;flex-shrink:0;padding:12px 10px;display:flex;align-items:center;justify-content:flex-end;gap:4px;position:relative;z-index:20}
 /* THEAD — todas as colunas com alinhamento centralizado idêntico à col-pri */
 .thead-row{display:flex;background:var(--surface2);border-bottom:1px solid var(--bd)}
 .th{font-size:10.5px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px}
@@ -118,7 +118,7 @@ select.fsel:focus{border-color:var(--blue)}
 .tl-tip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(15,15,20,.88);color:#fff;font-size:10px;padding:4px 8px;border-radius:5px;pointer-events:none;z-index:9999;max-width:220px;white-space:normal;text-align:center;line-height:1.4}
 .tl-dot:hover .tl-tip{display:block}
 .acts{display:flex;gap:4px}
-.ab{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);transition:all .13s}
+.ab{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);transition:all .13s;position:relative;z-index:21}
 .ab:hover{transform:scale(1.08)}
 .ab.adv:hover{border-color:var(--green);color:var(--green);background:var(--green-bg)}
 .ab.edit:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}
@@ -303,6 +303,20 @@ let settingsLoaded=false;
 let realtimeStarted=false;
 
 async function ensureSettingsRow(){
+  const { data: existing, error } = await db
+    .from('painel_configuracoes')
+    .select('id')
+    .eq('id', 1)
+    .maybeSingle();
+
+  if(error){
+    console.error('Erro ao verificar configuracoes:', error);
+    toast('Erro ao verificar configuracoes', 'red');
+    return false;
+  }
+
+  if(existing) return true;
+
   const payload = {
     id: 1,
     titulo: 'Processos de Compra de Alimentos',
@@ -310,13 +324,13 @@ async function ensureSettingsRow(){
     etapas: STEPS
   };
 
-  const { error } = await db
+  const { error: insertError } = await db
     .from('painel_configuracoes')
-    .upsert(payload, { onConflict: 'id', ignoreDuplicates: false });
+    .upsert(payload, { onConflict: 'id' });
 
-  if(error){
-    console.error('Erro ao garantir configuracoes:', error);
-    toast('Erro ao garantir configuracoes', 'red');
+  if(insertError){
+    console.error('Erro ao criar configuracoes iniciais:', insertError);
+    toast('Erro ao criar configuracoes iniciais', 'red');
     return false;
   }
 
@@ -691,6 +705,7 @@ async function advStep(dbId){
 function openModal(dbId){
   editingId=dbId;
   const d=dbId?data.find(x=>String(x.db_id)===String(dbId)):null;
+  if(dbId && !d){toast('Processo não encontrado para edição','red');return;}
   document.getElementById('modal-title').textContent=d?'Editar produto':'Novo processo';
   document.getElementById('f-name').value=d?d.name:'';
   document.getElementById('f-id').value=d?d.id:'';
@@ -809,15 +824,18 @@ function removeStepItem(i){
 }
 async function saveSteps(){
   document.getElementById('steps-list').querySelectorAll('input').forEach((inp,i)=>{tempSteps[i]=inp.value.trim()||tempSteps[i]});
-  STEPS=[...tempSteps];
+
+  const nextSteps=[...tempSteps];
+  const maxStep=Math.max(nextSteps.length-1,0);
+  const rowsToFix=data.filter(d=>d.step>maxStep);
+
+  for(const row of rowsToFix){
+    await updateProcess(row.db_id,{ etapa_atual:maxStep });
+  }
+
+  STEPS=nextSteps;
   data.forEach(d=>{if(d.step>=STEPS.length)d.step=STEPS.length-1});
   closeStepsManager();
-
-  const maxStep = Math.max(STEPS.length - 1, 0);
-  const rowsToFix = data.filter(d => d.step > maxStep);
-  for (const row of rowsToFix){
-    await updateProcess(row.db_id, { etapa_atual: maxStep });
-  }
 
   await savePanelSettings();
   await loadData();
