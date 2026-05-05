@@ -2,6 +2,11 @@
 
 
 
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -62,11 +67,11 @@
     .step-labels-row{display:flex;justify-content:space-between;padding:0 0 6px;width:100%;gap:2px}.step-lbl{font-size:8px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.2px;text-align:center;flex:1;cursor:default;line-height:1.3;overflow:hidden;padding:0 1px;word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-height:2.6em}.step-lbl:hover{color:var(--blue)}
     .prow{border-bottom:1px solid var(--bd);transition:background .12s;position:relative}.prow:last-child{border-bottom:none}.prow:hover{background:rgba(37,99,235,.025);z-index:30}.proc-id{font-size:10px;color:var(--t2);font-family:var(--font-mono);margin-bottom:2px;letter-spacing:.3px}.proc-name{font-size:12.5px;font-weight:600;letter-spacing:-0.2px;line-height:1.3;word-break:break-word}.stag{font-size:9.5px;padding:2px 6px;border-radius:4px;font-weight:500;margin-top:4px;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stag-blue{background:var(--blue-bg);color:var(--blue)}.stag-green{background:var(--green-bg);color:var(--green)}.stag-amber{background:var(--amber-bg);color:var(--amber)}.stag-red{background:var(--red-bg);color:var(--red)}
     .avatar{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#fff;flex-shrink:0}.resp-name{font-size:12px;font-weight:500;word-break:break-word}.prazo-wrap{display:flex;align-items:center;gap:5px}.prazo-val{font-size:12px}.pb-ok{color:var(--green)}.pb-soon{background:var(--amber-bg);color:var(--amber);padding:2px 5px;border-radius:4px;font-size:10px;font-weight:600}.pb-overdue{background:var(--red-bg);color:var(--red);padding:2px 5px;border-radius:4px;font-size:10px;font-weight:600}.pri{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:5px;font-size:11px;font-weight:600}.pri-dot{width:5px;height:5px;border-radius:50%;background:currentColor}.pri-high{background:var(--red-bg);color:var(--red)}.pri-med{background:var(--amber-bg);color:var(--amber)}.pri-low{background:var(--green-bg);color:var(--green)}
-    .tl-outer{position:relative;height:20px;width:100%}.tl-track{position:absolute;top:50%;left:0;right:0;height:1.5px;background:var(--bd2);transform:translateY(-50%);border-radius:2px}.tl-fill{position:absolute;top:50%;left:0;height:1.5px;background:var(--blue);transform:translateY(-50%);border-radius:2px;transition:width .4s}.tl-dots{position:relative;display:flex;justify-content:space-between;align-items:center;height:20px;width:100%}.tl-dot{width:14px;height:20px;border:0;background:transparent;position:relative;z-index:2;cursor:pointer;display:flex;align-items:center;justify-content:center}.tl-dot:before{content:"";width:9px;height:9px;border-radius:50%;border:2px solid;transition:transform .15s,box-shadow .15s}.tl-dot:hover:before,.tl-dot:focus:before{transform:scale(1.5)}.tl-dot.done:before{background:var(--blue);border-color:var(--blue)}.tl-dot.active:before{background:var(--green);border-color:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.2)}.tl-dot.future:before{background:var(--surface);border-color:var(--bd2)}.tl-dot:focus{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}.tl-tip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(15,15,20,.88);color:#fff;font-size:10px;padding:4px 8px;border-radius:5px;pointer-events:none;z-index:9999;max-width:220px;white-space:normal;text-align:center;line-height:1.4}.tl-dot:hover .tl-tip,.tl-dot:focus .tl-tip{display:block}
+    .tl-outer{position:relative;height:20px;width:100%}.tl-track{position:absolute;top:50%;left:0;right:0;height:1.5px;background:var(--bd2);transform:translateY(-50%);border-radius:2px}.tl-fill{position:absolute;top:50%;left:0;height:1.5px;background:var(--blue);transform:translateY(-50%);border-radius:2px;transition:width .4s}.tl-dots{position:relative;display:flex;justify-content:space-between;align-items:center;height:20px;width:100%}.tl-dot{width:14px;height:20px;border:0;background:transparent;position:relative;z-index:2;cursor:pointer;display:flex;align-items:center;justify-content:center}.tl-dot:before{content:"";width:9px;height:9px;border-radius:50%;border:2px solid;transition:transform .15s,box-shadow .15s}.tl-dot:hover:before,.tl-dot:focus:before{transform:scale(1.5)}.tl-dot.done:before{background:var(--blue);border-color:var(--blue)}.tl-dot.active:before{background:var(--green);border-color:var(--green);box-shadow:0 0 0 3px rgba(22,163,74,.2)}.tl-dot.active.due-soon2:before{background:#FACC15;border-color:#FACC15;box-shadow:0 0 0 3px rgba(250,204,21,.28)}.tl-dot.active.due-today:before{background:#F97316;border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,.2)}.tl-dot.active.due-overdue:before{background:var(--red);border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,.2)}.tl-dot.future:before{background:var(--surface);border-color:var(--bd2)}.tl-dot:focus{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}.tl-tip{display:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:rgba(15,15,20,.88);color:#fff;font-size:10px;padding:4px 8px;border-radius:5px;pointer-events:none;z-index:9999;max-width:220px;white-space:normal;text-align:center;line-height:1.4}.tl-dot:hover .tl-tip,.tl-dot:focus .tl-tip{display:block}
     .acts{display:flex;gap:4px}.ab{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);transition:all .13s;position:relative;z-index:21}.ab:hover:not(:disabled){transform:scale(1.08)}.ab:focus{outline:2px solid var(--blue);outline-offset:2px}.ab.adv:hover{border-color:var(--green);color:var(--green);background:var(--green-bg)}.ab.edit:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}.ab.del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
     .tfooter{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-top:1px solid var(--bd);background:var(--surface2);gap:12px}.tfooter span{font-size:11.5px;color:var(--t2)}.loading-row{padding:32px 16px;text-align:center;color:var(--t2);font-size:13px}.conflict-note{display:none;background:var(--amber-bg);color:var(--amber);border:1px solid rgba(180,83,9,.2);border-radius:8px;padding:9px 10px;font-size:12px;margin-bottom:12px;line-height:1.4}.conflict-note.show{display:block}
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}.modal{background:var(--surface);border-radius:14px;border:1px solid var(--bd);width:100%;max-width:520px;max-height:90vh;overflow-y:auto}.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--bd)}.modal-hdr h3{font-size:15px;font-weight:700;letter-spacing:-0.3px}.modal-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t2)}.modal-close:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}.modal-body{padding:18px 20px}.fgroup{margin-bottom:14px}.fgroup label{display:block;font-size:11.5px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}.finput{width:100%;padding:8px 11px;border-radius:7px;border:1px solid var(--bd2);background:var(--surface2);font-size:13px;color:var(--t1);outline:none;font-family:var(--font-sans)}.finput:focus{border-color:var(--blue);background:var(--surface)}select.finput{cursor:pointer}.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--bd);flex-wrap:wrap}.err{font-size:11px;color:var(--red);margin-top:4px;display:none}.err.show{display:block}.confirm-box{background:var(--surface);border-radius:12px;border:1px solid var(--bd);width:100%;max-width:380px;padding:24px;text-align:center}.confirm-box h3{font-size:15px;font-weight:700;margin-bottom:8px}.confirm-box p{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.6}.confirm-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.steps-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;max-height:340px;overflow-y:auto}.step-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--surface2)}.step-num{font-size:10.5px;color:var(--t2);font-weight:600;min-width:20px;text-align:center}.step-item input{flex:1;border:none;background:transparent;font-size:12.5px;color:var(--t1);outline:none;font-family:var(--font-sans);min-width:0}.step-item input:focus{border-bottom:1px solid var(--blue)}.step-del{width:22px;height:22px;border-radius:5px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t2);flex-shrink:0}.step-del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
-    .stage-meta{display:flex;flex-direction:column;gap:3px;font-size:11px;line-height:1.35}.stage-meta strong{font-size:11px;color:var(--t1);font-weight:600}.stage-meta span{color:var(--t2)}.stage-due{font-size:11px;margin-top:3px}.due-list{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto}.due-item{border:1px solid var(--bd);border-radius:8px;background:var(--surface2);padding:9px 10px;font-size:12px;line-height:1.45}.due-item strong{display:block;font-size:12.5px;color:var(--t1);margin-bottom:3px}.due-item span{display:block;color:var(--t2)}
+    .stage-meta{display:flex;flex-direction:column;gap:3px;font-size:11px;line-height:1.35}.stage-meta strong{font-size:11px;color:var(--t1);font-weight:600}.stage-meta span{color:var(--t2)}.stage-due{font-size:11px;margin-top:3px}.stage-edit-btn{margin-top:4px;align-self:flex-start;border:1px solid var(--bd);background:transparent;color:var(--t2);border-radius:5px;padding:2px 6px;font-size:10.5px;cursor:pointer}.stage-edit-btn:hover,.stage-edit-btn:focus{border-color:var(--blue);color:var(--blue);background:var(--blue-bg);outline:none}.due-list{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto}.due-item{border:1px solid var(--bd);border-radius:8px;background:var(--surface2);padding:9px 10px;font-size:12px;line-height:1.45}.due-item strong{display:block;font-size:12.5px;color:var(--t1);margin-bottom:3px}.due-item span{display:block;color:var(--t2)}.due-status{display:inline-block;margin-top:4px;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600}.due-status.overdue{background:var(--red-bg);color:var(--red)}.due-status.today{background:var(--amber-bg);color:var(--amber)}.due-status.soon,.due-status.soon2,.due-status.soon5{background:var(--blue-bg);color:var(--blue)}
     .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}.toast{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--bd);border-radius:9px;padding:10px 14px;font-size:12.5px;font-weight:500;pointer-events:all;animation:toastIn .25s ease;min-width:220px;box-shadow:0 8px 30px rgba(0,0,0,.08)}.toast-ic{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0}.t-green .toast-ic{background:var(--green)}.t-blue .toast-ic{background:var(--blue)}.t-red .toast-ic{background:var(--red)}.t-amber .toast-ic{background:var(--amber)}@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.toast.out{animation:toastOut .2s ease forwards}@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
     @media (max-width:900px){.wrap{padding:16px 14px 36px}.hdr{flex-direction:column}.hdr-actions{width:100%;justify-content:flex-start}.kpi-row{grid-template-columns:repeat(2,1fr)}.fbar{align-items:stretch}.srch{flex-basis:100%}select.fsel{flex:1;min-width:150px;max-width:none}.fsep{display:none}.title-display,.subtitle-display{max-width:100%}}
     @media (max-width:560px){.kpi-row{grid-template-columns:1fr}.hdr-actions .btn{flex:1}.frow{grid-template-columns:1fr}.modal-footer,.confirm-btns{justify-content:stretch}.modal-footer .btn,.confirm-btns .btn{flex:1}.toast-wrap{left:14px;right:14px;bottom:14px}.toast{min-width:0}.tfooter{flex-direction:column;align-items:flex-start}.fbar{padding:10px}.wrap{padding-left:10px;padding-right:10px}}
@@ -144,7 +149,7 @@
         <div class="fgroup"><label for="f-name">Produto *</label><input class="finput" id="f-name" placeholder="Ex: Arroz integral 50kg"><div class="err" id="e-name">Campo obrigatório</div></div>
         <div class="frow">
           <div class="fgroup"><label for="f-id">Processo SEI *</label><input class="finput" id="f-id" placeholder="Ex: 00190.000001/2025-01"><div class="err" id="e-id">Campo obrigatório</div></div>
-          <div class="fgroup"><label for="f-prazo">Prazo final (DD/MM/AAAA)</label><input class="finput" id="f-prazo" placeholder="Ex: 30/05/2026" type="text" inputmode="numeric"><div class="err" id="e-prazo">Use uma data válida no formato DD/MM/AAAA</div></div>
+          <div class="fgroup"><label for="f-prazo">Prazo final</label><input class="finput" id="f-prazo" type="date"><div class="err" id="e-prazo">Use uma data válida</div></div>
         </div>
         <div class="frow">
           <div class="fgroup"><label for="f-pri">Prioridade</label><select class="finput" id="f-pri"><option>Alta</option><option selected>Média</option><option>Baixa</option></select></div>
@@ -198,7 +203,7 @@
       <div class="modal-body">
         <p id="stage-msg" style="font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.5"></p>
         <div class="fgroup"><label for="stage-resp">Responsável da etapa *</label><input class="finput" id="stage-resp" placeholder="Nome completo"><div class="err" id="e-stage-resp">Campo obrigatório</div></div>
-        <div class="fgroup"><label for="stage-deadline">Prazo máximo da etapa *</label><input class="finput" id="stage-deadline" type="datetime-local"><div class="err" id="e-stage-deadline">Informe um prazo máximo válido</div></div>
+        <div class="fgroup"><label for="stage-deadline">Prazo máximo da etapa *</label><input class="finput" id="stage-deadline" type="date"><div class="err" id="e-stage-deadline">Informe uma data válida</div></div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-ghost" id="stage-cancel" type="button">Cancelar</button>
@@ -214,7 +219,7 @@
         <button class="modal-close" id="due-close" type="button" aria-label="Fechar aviso de vencimento">✕</button>
       </div>
       <div class="modal-body">
-        <p style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.5">As etapas abaixo estão com 20% ou menos do tempo total restante.</p>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.5">As etapas abaixo estão atrasadas, vencem hoje, vencem em 2 dias ou vencem em 5 dias.</p>
         <div class="due-list" id="due-list"></div>
       </div>
       <div class="modal-footer">
@@ -262,7 +267,7 @@
     let suppressProcessRealtimeUntil = 0;
     let suppressConfigRealtimeUntil = 0;
     let activeModal = null;
-    let lastFocusedElement = null;
+    let focusStack = [];
     let supportsEtapaId = true;
     let supportsPrazoIso = true;
     let supportsStageFields = true;
@@ -358,44 +363,63 @@
       const m = String(date.getMonth() + 1).padStart(2,'0');
       return `${d}/${m}/${date.getFullYear()}`;
     }
-    function parseDateTimeValue(value){
+    function parseStageDateValue(value){
       const raw = cleanSpaces(value);
       if(!raw) return null;
+      const fromISO = parseISODate(raw);
+      if(fromISO){ fromISO.setHours(23,59,59,999); return fromISO; }
+      const fromBR = parseDateBR(raw);
+      if(fromBR){ fromBR.setHours(23,59,59,999); return fromBR; }
       const d = new Date(raw);
-      return Number.isNaN(d.getTime()) ? null : d;
+      if(Number.isNaN(d.getTime())) return null;
+      d.setHours(23,59,59,999);
+      return d;
     }
-    function isoToLocalInput(value){
+    function isoToDateInput(value){
       if(!value) return '';
-      const d = new Date(value);
-      if(Number.isNaN(d.getTime())) return '';
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2,'0');
-      const day = String(d.getDate()).padStart(2,'0');
-      const h = String(d.getHours()).padStart(2,'0');
-      const min = String(d.getMinutes()).padStart(2,'0');
-      return `${y}-${m}-${day}T${h}:${min}`;
+      const raw = cleanSpaces(value);
+      const d = parseISODate(raw) || new Date(raw);
+      return Number.isNaN(d.getTime()) ? '' : dateToISO(d);
     }
-    function dateTimeToBR(value){
+    function dateOnlyToBR(value){
       if(!value) return '';
-      const d = new Date(value);
-      if(Number.isNaN(d.getTime())) return '';
-      const day = String(d.getDate()).padStart(2,'0');
-      const m = String(d.getMonth() + 1).padStart(2,'0');
-      const h = String(d.getHours()).padStart(2,'0');
-      const min = String(d.getMinutes()).padStart(2,'0');
-      return `${day}/${m}/${d.getFullYear()} ${h}:${min}`;
+      const raw = cleanSpaces(value);
+      const d = parseISODate(raw) || new Date(raw);
+      return Number.isNaN(d.getTime()) ? '' : dateToBR(d);
+    }
+    function getStageDeadlineDay(value){
+      if(!value) return null;
+      const raw = cleanSpaces(value);
+      const d = parseISODate(raw) || new Date(raw);
+      if(Number.isNaN(d.getTime())) return null;
+      d.setHours(0,0,0,0);
+      return d;
+    }
+    function getStageDeadlineDiffDays(item){
+      if(!item?.stageDeadline) return null;
+      if(item.stepIndex >= STEPS.length - 1) return null;
+      const endDay = getStageDeadlineDay(item.stageDeadline);
+      if(!endDay) return null;
+      const today = new Date();
+      today.setHours(0,0,0,0);
+      return Math.floor((endDay - today) / (1000 * 60 * 60 * 24));
     }
     function getStageDeadlineStatus(item){
-      if(!item?.stageDeadline || !item?.stageStartedAt) return 'none';
-      if(item.stepIndex >= STEPS.length - 1) return 'done';
-      const start = new Date(item.stageStartedAt);
-      const end = new Date(item.stageDeadline);
-      const now = new Date();
-      if(Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) return 'none';
-      const remaining = end - now;
-      if(remaining < 0) return 'overdue';
-      const total = end - start;
-      return remaining <= total * 0.2 ? 'soon' : 'ok';
+      const diff = getStageDeadlineDiffDays(item);
+      if(item?.stageDeadline && item.stepIndex >= STEPS.length - 1) return 'done';
+      if(diff === null) return 'none';
+      if(diff < 0) return 'overdue';
+      if(diff === 0) return 'today';
+      if(diff === 2) return 'soon2';
+      if(diff === 5) return 'soon5';
+      return 'ok';
+    }
+    function currentStageDotDeadlineClass(item){
+      const status = getStageDeadlineStatus(item);
+      if(status === 'overdue') return 'due-overdue';
+      if(status === 'today') return 'due-today';
+      if(status === 'soon2') return 'due-soon2';
+      return '';
     }
     function normalizePrazoForUI(row){
       const fromIso = parseISODate(row?.prazo_iso);
@@ -406,7 +430,7 @@
     function validatePrazoInput(str){
       const raw = cleanSpaces(str);
       if(!raw) return { ok:true, br:'', iso:'' };
-      const d = parseDateBR(raw);
+      const d = parseISODate(raw) || parseDateBR(raw);
       return d ? { ok:true, br:dateToBR(d), iso:dateToISO(d) } : { ok:false, br:raw, iso:'' };
     }
     function avatarFromName(name){
@@ -570,9 +594,8 @@
         if(missingStageField){
           console.warn('Campos de etapa não existem no banco.', result.error);
           supportsStageFields = false;
-          toast('Crie os campos de etapa no Supabase para salvar prazo e responsável por etapa.', 'amber');
-          delete fullPayload.etapa_iniciada_em; delete fullPayload.etapa_prazo_maximo; delete fullPayload.etapa_responsavel;
-          result = await action(fullPayload);
+          toast('Não foi possível alterar a etapa: crie os campos de prazo e responsável da etapa no Supabase.', 'red');
+          return result;
         }
       }
       return result;
@@ -640,12 +663,14 @@
       return `<span class="prazo-val pb-ok">${safeStr}</span>`;
     }
     function stageDeadlineBadge(item){
-      const text = dateTimeToBR(item?.stageDeadline);
+      const text = dateOnlyToBR(item?.stageDeadline);
       const status = getStageDeadlineStatus(item);
       if(status === 'done') return '';
       if(!text || status === 'none') return '<span style="color:var(--t2)">—</span>';
       if(status === 'overdue') return `<span class="pb-overdue">⚠ ${esc(text)}</span>`;
-      if(status === 'soon') return `<span class="pb-soon">⏰ ${esc(text)}</span>`;
+      if(status === 'today') return `<span class="pb-soon">Hoje ${esc(text)}</span>`;
+      if(status === 'soon2') return `<span class="pb-soon">⏰ ${esc(text)}</span>`;
+      if(status === 'soon5') return `<span class="pb-ok">${esc(text)}</span>`;
       return `<span class="pb-ok">${esc(text)}</span>`;
     }
     function updateKPI(){
@@ -721,7 +746,7 @@
       }
       $('tbody').innerHTML = list.map(d => {
         const dots = STEPS.map((s, si) => {
-          const cls = si < d.stepIndex ? 'done' : si === d.stepIndex ? 'active' : 'future';
+          const cls = si < d.stepIndex ? 'done' : si === d.stepIndex ? `active ${currentStageDotDeadlineClass(d)}` : 'future';
           return `<button type="button" class="tl-dot ${cls}" data-id="${esc(d.db_id)}" data-si="${si}" aria-label="Definir etapa: ${esc(s.label)}"><span class="tl-tip">${esc(s.label)}</span></button>`;
         }).join('');
         const stepLabel = STEPS[d.stepIndex]?.label || STEPS[0]?.label || '';
@@ -729,7 +754,7 @@
           <div class="row-grid">
             <div class="col-proc"><div class="proc-id">${esc(d.id)}</div><div class="proc-name">${esc(d.name)}</div><span class="stag ${stagStyle(d)}">${esc(stepLabel)}</span></div>
             <div class="col-resp"><div style="display:flex;align-items:center;gap:6px"><div class="avatar" style="background:${AV_COLORS[d.avatar]}">${esc(initials(d.resp))}</div><span class="resp-name">${esc(d.resp || '—')}</span></div></div>
-            <div class="col-prazo"><div class="stage-meta"><strong>Prazo final:</strong><span>${prazoBadge(d.prazo, d.stepIndex)}</span><strong>Venc. etapa:</strong><span class="stage-due">${stageDeadlineBadge(d)}</span></div></div>
+            <div class="col-prazo"><div class="stage-meta"><strong>Prazo final:</strong><span>${prazoBadge(d.prazo, d.stepIndex)}</span><strong>Venc. etapa:</strong><span class="stage-due">${stageDeadlineBadge(d)}</span><button class="stage-edit-btn" type="button" data-id="${esc(d.db_id)}" title="Editar responsável e prazo da etapa">Editar etapa</button></div></div>
             <div class="col-pri"><span class="pri ${priCls(d.pri)}"><span class="pri-dot"></span>${esc(d.pri)}</span></div>
             <div class="col-tl"><div class="tl-outer"><div class="tl-track"></div><div class="tl-fill" style="width:${pct(d.stepIndex)}%"></div><div class="tl-dots">${dots}</div></div></div>
             <div class="col-acts"><button class="ab adv" data-id="${esc(d.db_id)}" title="Avançar etapa" aria-label="Avançar etapa">▶</button><button class="ab edit" data-id="${esc(d.db_id)}" title="Editar" aria-label="Editar processo">✎</button><button class="ab del" data-id="${esc(d.db_id)}" title="Excluir" aria-label="Excluir processo">✕</button></div>
@@ -741,7 +766,8 @@
     function refresh(){ updateKPI(); populateFilters(); renderStepLabels(); renderTable(); }
 
     function showOverlay(id, focusSelector){
-      lastFocusedElement = document.activeElement;
+      const currentFocus = document.activeElement;
+      focusStack.push({ id, element:currentFocus });
       const overlay = $(id);
       overlay.style.display = 'flex';
       activeModal = id;
@@ -751,7 +777,17 @@
     function hideOverlay(id){
       $(id).style.display = 'none';
       if(activeModal === id) activeModal = null;
-      if(lastFocusedElement && typeof lastFocusedElement.focus === 'function') setTimeout(() => lastFocusedElement.focus(), 30);
+      let focusEntry = null;
+      for(let i = focusStack.length - 1; i >= 0; i--){
+        if(focusStack[i].id === id){
+          focusEntry = focusStack.splice(i, 1)[0];
+          break;
+        }
+      }
+      const target = focusEntry?.element;
+      if(target && typeof target.focus === 'function' && document.contains(target)){
+        setTimeout(() => target.focus(), 30);
+      }
     }
     function startTitleEdit(){
       $('title-display').style.display = 'none';
@@ -811,7 +847,7 @@
       $('modal-title').textContent = d ? 'Editar produto' : 'Novo processo';
       $('f-name').value = d?.name || '';
       $('f-id').value = d?.id || '';
-      $('f-prazo').value = d?.prazo || '';
+      $('f-prazo').value = d?.prazo ? dateToISO(parseDateBR(d.prazo)) : '';
       $('f-pri').value = d?.pri || 'Média';
       $('f-obs').value = d?.obs || '';
       const currentIndex = d ? d.stepIndex : 0;
@@ -846,6 +882,7 @@
         if(!success) return;
         closeModal();
         await loadData();
+        showDueAlertIfNeeded();
       } finally {
         processSaving = false;
         setButtonLoading(btn, false);
@@ -857,11 +894,24 @@
       const safeIndex = clampStepIndex(targetStepIndex);
       if(safeIndex === d.stepIndex){ toast('Esta etapa já está selecionada.', 'blue'); return; }
       const step = STEPS[safeIndex];
-      pendingStageChange = { dbId:d.db_id, targetStepIndex:safeIndex, targetStepId:step.id, previousStepIndex:d.stepIndex, previousStepId:d.stepId };
+      pendingStageChange = { mode:'change', dbId:d.db_id, targetStepIndex:safeIndex, targetStepId:step.id, previousStepIndex:d.stepIndex, previousStepId:d.stepId };
       $('stage-title').textContent = 'Alterar etapa';
       $('stage-msg').innerHTML = `Antes de salvar a mudança para <strong>${esc(step.label)}</strong>, informe o prazo máximo e o responsável desta etapa.`;
       $('stage-resp').value = '';
       $('stage-deadline').value = '';
+      $('e-stage-resp').classList.remove('show');
+      $('e-stage-deadline').classList.remove('show');
+      showOverlay('stage-overlay', '#stage-resp');
+    }
+    function openStageMetaEditModal(dbId){
+      const d = data.find(x => String(x.db_id) === String(dbId));
+      if(!d){ toast('Processo não encontrado para edição da etapa.', 'red'); return; }
+      const stepLabel = STEPS[d.stepIndex]?.label || 'etapa atual';
+      pendingStageChange = { mode:'edit', dbId:d.db_id };
+      $('stage-title').textContent = 'Editar dados da etapa';
+      $('stage-msg').innerHTML = `Edite o responsável e o prazo máximo da <strong>${esc(stepLabel)}</strong> sem alterar a etapa atual.`;
+      $('stage-resp').value = d.resp || '';
+      $('stage-deadline').value = isoToDateInput(d.stageDeadline);
       $('e-stage-resp').classList.remove('show');
       $('e-stage-deadline').classList.remove('show');
       showOverlay('stage-overlay', '#stage-resp');
@@ -871,7 +921,7 @@
       if(processSaving || !pendingStageChange) return;
       const btn = $('stage-save');
       const resp = cleanSpaces($('stage-resp').value);
-      const deadline = parseDateTimeValue($('stage-deadline').value);
+      const deadline = parseStageDateValue($('stage-deadline').value);
       let ok = true;
       if(!resp){ $('e-stage-resp').classList.add('show'); ok = false; } else $('e-stage-resp').classList.remove('show');
       if(!deadline){ $('e-stage-deadline').classList.add('show'); ok = false; } else $('e-stage-deadline').classList.remove('show');
@@ -881,19 +931,24 @@
       setButtonLoading(btn, true, 'Salvando...');
       processSaving = true;
       try{
-        const startedAt = new Date().toISOString();
-        const payload = {
-          etapa_atual:pendingStageChange.targetStepIndex,
-          etapa_id:pendingStageChange.targetStepId,
-          etapa_iniciada_em:startedAt,
-          etapa_prazo_maximo:deadline.toISOString(),
-          etapa_responsavel:resp
-        };
+        const payload = pendingStageChange.mode === 'edit'
+          ? {
+              etapa_prazo_maximo:deadline.toISOString(),
+              etapa_responsavel:resp
+            }
+          : {
+              etapa_atual:pendingStageChange.targetStepIndex,
+              etapa_id:pendingStageChange.targetStepId,
+              etapa_iniciada_em:new Date().toISOString(),
+              etapa_prazo_maximo:deadline.toISOString(),
+              etapa_responsavel:resp
+            };
         const success = await updateProcess(d.db_id, payload);
         if(!success) return;
         closeStageChangeModal();
         await loadData({ showLoading:false });
-        toast('Etapa atualizada: ' + (STEPS[payload.etapa_atual]?.label || ''), 'green');
+        showDueAlertIfNeeded();
+        toast(payload.etapa_atual === undefined ? 'Dados da etapa atualizados' : 'Etapa atualizada: ' + (STEPS[payload.etapa_atual]?.label || ''), 'green');
       } finally {
         processSaving = false;
         setButtonLoading(btn, false);
@@ -927,6 +982,7 @@
         if(!success) return;
         closeConfirm();
         await loadData();
+        showDueAlertIfNeeded();
         toast('Processo removido', 'red');
       } finally {
         deleteSaving = false;
@@ -987,13 +1043,9 @@
         const ok = await saveStepsValue(normalized);
         if(!ok) return;
         STEPS = normalized;
-        data = data.map(item => {
-          const byId = getStepById(item.stepId);
-          const nextIndex = byId ? STEPS.findIndex(s => s.id === byId.id) : Math.min(item.stepIndex, STEPS.length - 1);
-          return { ...item, stepIndex:Math.max(0, nextIndex), stepId:(STEPS[Math.max(0, nextIndex)] || STEPS[0]).id };
-        });
         closeStepsManager();
         await loadData();
+        showDueAlertIfNeeded();
         toast('Etapas atualizadas (' + STEPS.length + ')', 'green');
       } finally {
         stepsSaving = false;
@@ -1001,26 +1053,26 @@
       }
     }
 
-    function getNearDueProcesses(){
-      const now = new Date();
-      return data.filter(item => {
-        if(item.stepIndex >= STEPS.length - 1 || !item.stageStartedAt || !item.stageDeadline) return false;
-        const start = new Date(item.stageStartedAt);
-        const end = new Date(item.stageDeadline);
-        if(Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) return false;
-        const total = end - start;
-        const remaining = end - now;
-        return remaining >= 0 && remaining <= total * 0.2;
-      });
+    function getDueAlertProcesses(){
+      return data.map(item => ({ item, status:getStageDeadlineStatus(item) }))
+        .filter(entry => ['overdue','today','soon2','soon5'].includes(entry.status));
+    }
+    function dueStatusLabel(status){
+      if(status === 'overdue') return 'Atrasado';
+      if(status === 'today') return 'Vence hoje';
+      if(status === 'soon2') return 'Faltam 2 dias';
+      if(status === 'soon5') return 'Faltam 5 dias';
+      return '';
     }
     function showDueAlertIfNeeded(){
       if(dueAlertShown) return;
-      const list = getNearDueProcesses();
+      const list = getDueAlertProcesses();
       if(!list.length) return;
       dueAlertShown = true;
-      $('due-list').innerHTML = list.map(item => {
+      $('due-title').textContent = 'Atenção aos prazos de etapa';
+      $('due-list').innerHTML = list.map(({ item, status }) => {
         const stepLabel = STEPS[item.stepIndex]?.label || '';
-        return `<div class="due-item"><strong>${esc(item.name || item.id || 'Processo sem identificação')}</strong><span>Processo: ${esc(item.id || '—')}</span><span>Etapa atual: ${esc(stepLabel || '—')}</span><span>Responsável da etapa: ${esc(item.resp || '—')}</span><span>Vencimento da etapa: ${esc(dateTimeToBR(item.stageDeadline) || '—')}</span></div>`;
+        return `<div class="due-item"><strong>${esc(item.name || item.id || 'Processo sem identificação')}</strong><span>Processo: ${esc(item.id || '—')}</span><span>Etapa atual: ${esc(stepLabel || '—')}</span><span>Responsável da etapa: ${esc(item.resp || '—')}</span><span>Vencimento da etapa: ${esc(dateOnlyToBR(item.stageDeadline) || '—')}</span><span class="due-status ${esc(status)}">${esc(dueStatusLabel(status))}</span></div>`;
       }).join('');
       showOverlay('due-overlay', '#due-ok');
     }
@@ -1028,8 +1080,8 @@
 
     function exportCSV(){
       const headers = ['Processo SEI','Nome','Responsável da etapa','Prioridade','Prazo final','Etapa atual','Início da etapa','Vencimento da etapa','Progresso %','Observações'];
-      const rows = getFilteredData().map(d => [d.id,d.name,d.resp,d.pri,d.prazo || '',STEPS[d.stepIndex]?.label || '',dateTimeToBR(d.stageStartedAt) || '',dateTimeToBR(d.stageDeadline) || '',(STEPS.length <= 1 ? 100 : Math.round(d.stepIndex / (STEPS.length - 1) * 100)) + '%',d.obs || '']);
-      const csv = [headers, ...rows].map(r => r.map(c => '"' + (c || '').toString().replace(/"/g,'""') + '"').join(',')).join('\n');
+      const rows = getFilteredData().map(d => [d.id,d.name,d.resp,d.pri,d.prazo || '',STEPS[d.stepIndex]?.label || '',dateOnlyToBR(d.stageStartedAt) || '',dateOnlyToBR(d.stageDeadline) || '',(STEPS.length <= 1 ? 100 : Math.round(d.stepIndex / (STEPS.length - 1) * 100)) + '%',d.obs || '']);
+      const csv = [headers, ...rows].map(r => r.map(c => '"' + (c || '').toString().replace(/"/g,'""') + '"').join(';')).join('\n');
       const blob = new Blob(['\uFEFF' + csv], { type:'text/csv;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1049,6 +1101,7 @@
         .on('postgres_changes', { event:'*', schema:'public', table:'processos' }, async () => {
           if(Date.now() < suppressProcessRealtimeUntil) return;
           await loadData();
+          showDueAlertIfNeeded();
         })
         .subscribe(status => { if(status === 'CHANNEL_ERROR') console.error('Realtime de processos indisponível'); });
       db.channel('config-sync')
@@ -1104,6 +1157,8 @@
         const edit = e.target.closest('.ab.edit');
         const del = e.target.closest('.ab.del');
         const dot = e.target.closest('.tl-dot');
+        const stageEdit = e.target.closest('.stage-edit-btn');
+        if(stageEdit) return openStageMetaEditModal(stageEdit.dataset.id);
         if(adv) return advStep(adv.dataset.id);
         if(edit) return openModal(edit.dataset.id);
         if(del) return askDelete(del.dataset.id);
