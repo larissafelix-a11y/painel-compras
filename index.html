@@ -1,5 +1,7 @@
 
 
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -64,6 +66,7 @@
     .acts{display:flex;gap:4px}.ab{width:26px;height:26px;border-radius:6px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--t2);transition:all .13s;position:relative;z-index:21}.ab:hover:not(:disabled){transform:scale(1.08)}.ab:focus{outline:2px solid var(--blue);outline-offset:2px}.ab.adv:hover{border-color:var(--green);color:var(--green);background:var(--green-bg)}.ab.edit:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}.ab.del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
     .tfooter{display:flex;align-items:center;justify-content:space-between;padding:9px 16px;border-top:1px solid var(--bd);background:var(--surface2);gap:12px}.tfooter span{font-size:11.5px;color:var(--t2)}.loading-row{padding:32px 16px;text-align:center;color:var(--t2);font-size:13px}.conflict-note{display:none;background:var(--amber-bg);color:var(--amber);border:1px solid rgba(180,83,9,.2);border-radius:8px;padding:9px 10px;font-size:12px;margin-bottom:12px;line-height:1.4}.conflict-note.show{display:block}
     .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}.modal{background:var(--surface);border-radius:14px;border:1px solid var(--bd);width:100%;max-width:520px;max-height:90vh;overflow-y:auto}.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--bd)}.modal-hdr h3{font-size:15px;font-weight:700;letter-spacing:-0.3px}.modal-close{width:28px;height:28px;border-radius:7px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--t2)}.modal-close:hover{background:var(--red-bg);color:var(--red);border-color:var(--red)}.modal-body{padding:18px 20px}.fgroup{margin-bottom:14px}.fgroup label{display:block;font-size:11.5px;font-weight:600;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}.finput{width:100%;padding:8px 11px;border-radius:7px;border:1px solid var(--bd2);background:var(--surface2);font-size:13px;color:var(--t1);outline:none;font-family:var(--font-sans)}.finput:focus{border-color:var(--blue);background:var(--surface)}select.finput{cursor:pointer}.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}.modal-footer{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid var(--bd);flex-wrap:wrap}.err{font-size:11px;color:var(--red);margin-top:4px;display:none}.err.show{display:block}.confirm-box{background:var(--surface);border-radius:12px;border:1px solid var(--bd);width:100%;max-width:380px;padding:24px;text-align:center}.confirm-box h3{font-size:15px;font-weight:700;margin-bottom:8px}.confirm-box p{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.6}.confirm-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.steps-list{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;max-height:340px;overflow-y:auto}.step-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;border:1px solid var(--bd);background:var(--surface2)}.step-num{font-size:10.5px;color:var(--t2);font-weight:600;min-width:20px;text-align:center}.step-item input{flex:1;border:none;background:transparent;font-size:12.5px;color:var(--t1);outline:none;font-family:var(--font-sans);min-width:0}.step-item input:focus{border-bottom:1px solid var(--blue)}.step-del{width:22px;height:22px;border-radius:5px;border:1px solid var(--bd);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--t2);flex-shrink:0}.step-del:hover{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+    .stage-meta{display:flex;flex-direction:column;gap:3px;font-size:11px;line-height:1.35}.stage-meta strong{font-size:11px;color:var(--t1);font-weight:600}.stage-meta span{color:var(--t2)}.stage-due{font-size:11px;margin-top:3px}.due-list{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto}.due-item{border:1px solid var(--bd);border-radius:8px;background:var(--surface2);padding:9px 10px;font-size:12px;line-height:1.45}.due-item strong{display:block;font-size:12.5px;color:var(--t1);margin-bottom:3px}.due-item span{display:block;color:var(--t2)}
     .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}.toast{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--bd);border-radius:9px;padding:10px 14px;font-size:12.5px;font-weight:500;pointer-events:all;animation:toastIn .25s ease;min-width:220px;box-shadow:0 8px 30px rgba(0,0,0,.08)}.toast-ic{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;flex-shrink:0}.t-green .toast-ic{background:var(--green)}.t-blue .toast-ic{background:var(--blue)}.t-red .toast-ic{background:var(--red)}.t-amber .toast-ic{background:var(--amber)}@keyframes toastIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}.toast.out{animation:toastOut .2s ease forwards}@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
     @media (max-width:900px){.wrap{padding:16px 14px 36px}.hdr{flex-direction:column}.hdr-actions{width:100%;justify-content:flex-start}.kpi-row{grid-template-columns:repeat(2,1fr)}.fbar{align-items:stretch}.srch{flex-basis:100%}select.fsel{flex:1;min-width:150px;max-width:none}.fsep{display:none}.title-display,.subtitle-display{max-width:100%}}
     @media (max-width:560px){.kpi-row{grid-template-columns:1fr}.hdr-actions .btn{flex:1}.frow{grid-template-columns:1fr}.modal-footer,.confirm-btns{justify-content:stretch}.modal-footer .btn,.confirm-btns .btn{flex:1}.toast-wrap{left:14px;right:14px;bottom:14px}.toast{min-width:0}.tfooter{flex-direction:column;align-items:flex-start}.fbar{padding:10px}.wrap{padding-left:10px;padding-right:10px}}
@@ -113,8 +116,8 @@
         <div class="table-inner">
           <div class="thead-row" id="thead-row">
             <div class="col-proc th">Produto / SEI</div>
-            <div class="col-resp th">Responsável</div>
-            <div class="col-prazo th">Prazo</div>
+            <div class="col-resp th">Resp. etapa</div>
+            <div class="col-prazo th">Prazos</div>
             <div class="col-pri th">Prioridade</div>
             <div class="col-tl">
               <div class="th" style="margin-bottom:6px">Etapas do processo</div>
@@ -141,9 +144,8 @@
         <div class="fgroup"><label for="f-name">Produto *</label><input class="finput" id="f-name" placeholder="Ex: Arroz integral 50kg"><div class="err" id="e-name">Campo obrigatório</div></div>
         <div class="frow">
           <div class="fgroup"><label for="f-id">Processo SEI *</label><input class="finput" id="f-id" placeholder="Ex: 00190.000001/2025-01"><div class="err" id="e-id">Campo obrigatório</div></div>
-          <div class="fgroup"><label for="f-prazo">Prazo (DD/MM/AAAA)</label><input class="finput" id="f-prazo" placeholder="Ex: 30/05/2025" type="text" inputmode="numeric"><div class="err" id="e-prazo">Use uma data válida no formato DD/MM/AAAA</div></div>
+          <div class="fgroup"><label for="f-prazo">Prazo final (DD/MM/AAAA)</label><input class="finput" id="f-prazo" placeholder="Ex: 30/05/2026" type="text" inputmode="numeric"><div class="err" id="e-prazo">Use uma data válida no formato DD/MM/AAAA</div></div>
         </div>
-        <div class="fgroup"><label for="f-resp">Responsável *</label><input class="finput" id="f-resp" placeholder="Nome completo"><div class="err" id="e-resp">Campo obrigatório</div></div>
         <div class="frow">
           <div class="fgroup"><label for="f-pri">Prioridade</label><select class="finput" id="f-pri"><option>Alta</option><option selected>Média</option><option>Baixa</option></select></div>
           <div class="fgroup"><label for="f-step">Etapa atual</label><select class="finput" id="f-step"></select></div>
@@ -183,6 +185,40 @@
       <div class="confirm-btns">
         <button class="btn btn-ghost" id="confirm-cancel" type="button">Cancelar</button>
         <button class="btn btn-danger" id="confirm-delete" type="button">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="stage-overlay" style="display:none">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="stage-title" style="max-width:460px" tabindex="-1">
+      <div class="modal-hdr">
+        <h3 id="stage-title">Alterar etapa</h3>
+        <button class="modal-close" id="stage-close" type="button" aria-label="Fechar modal de alteração de etapa">✕</button>
+      </div>
+      <div class="modal-body">
+        <p id="stage-msg" style="font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.5"></p>
+        <div class="fgroup"><label for="stage-resp">Responsável da etapa *</label><input class="finput" id="stage-resp" placeholder="Nome completo"><div class="err" id="e-stage-resp">Campo obrigatório</div></div>
+        <div class="fgroup"><label for="stage-deadline">Prazo máximo da etapa *</label><input class="finput" id="stage-deadline" type="datetime-local"><div class="err" id="e-stage-deadline">Informe um prazo máximo válido</div></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" id="stage-cancel" type="button">Cancelar</button>
+        <button class="btn btn-primary" id="stage-save" type="button">Salvar alteração</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="due-overlay" style="display:none">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="due-title" style="max-width:560px" tabindex="-1">
+      <div class="modal-hdr">
+        <h3 id="due-title">Processos próximos do vencimento</h3>
+        <button class="modal-close" id="due-close" type="button" aria-label="Fechar aviso de vencimento">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.5">As etapas abaixo estão com 20% ou menos do tempo total restante.</p>
+        <div class="due-list" id="due-list"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="due-ok" type="button">Entendi</button>
       </div>
     </div>
   </div>
@@ -229,6 +265,9 @@
     let lastFocusedElement = null;
     let supportsEtapaId = true;
     let supportsPrazoIso = true;
+    let supportsStageFields = true;
+    let pendingStageChange = null;
+    let dueAlertShown = false;
 
     const $ = (id) => document.getElementById(id);
 
@@ -318,6 +357,45 @@
       const d = String(date.getDate()).padStart(2,'0');
       const m = String(date.getMonth() + 1).padStart(2,'0');
       return `${d}/${m}/${date.getFullYear()}`;
+    }
+    function parseDateTimeValue(value){
+      const raw = cleanSpaces(value);
+      if(!raw) return null;
+      const d = new Date(raw);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+    function isoToLocalInput(value){
+      if(!value) return '';
+      const d = new Date(value);
+      if(Number.isNaN(d.getTime())) return '';
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      const h = String(d.getHours()).padStart(2,'0');
+      const min = String(d.getMinutes()).padStart(2,'0');
+      return `${y}-${m}-${day}T${h}:${min}`;
+    }
+    function dateTimeToBR(value){
+      if(!value) return '';
+      const d = new Date(value);
+      if(Number.isNaN(d.getTime())) return '';
+      const day = String(d.getDate()).padStart(2,'0');
+      const m = String(d.getMonth() + 1).padStart(2,'0');
+      const h = String(d.getHours()).padStart(2,'0');
+      const min = String(d.getMinutes()).padStart(2,'0');
+      return `${day}/${m}/${d.getFullYear()} ${h}:${min}`;
+    }
+    function getStageDeadlineStatus(item){
+      if(!item?.stageDeadline || !item?.stageStartedAt) return 'none';
+      if(item.stepIndex >= STEPS.length - 1) return 'done';
+      const start = new Date(item.stageStartedAt);
+      const end = new Date(item.stageDeadline);
+      const now = new Date();
+      if(Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) return 'none';
+      const remaining = end - now;
+      if(remaining < 0) return 'overdue';
+      const total = end - start;
+      return remaining <= total * 0.2 ? 'soon' : 'ok';
     }
     function normalizePrazoForUI(row){
       const fromIso = parseISODate(row?.prazo_iso);
@@ -446,19 +524,23 @@
       if(error){ console.error('Erro ao carregar processos:', error); toast(userMessageForSupabaseError(error, 'carregar processos'), 'red'); data = []; refresh(); return false; }
       data = (rows || []).map(row => {
         const resolved = resolveStep(row);
-        const resp = cleanSpaces(row.responsavel || '');
+        const legacyResp = cleanSpaces(row.responsavel || '');
+        const stageResp = cleanSpaces(row.etapa_responsavel || legacyResp);
         return {
           db_id:row.id,
           id:cleanSpaces(row.sei || ''),
           name:cleanSpaces(row.nome || ''),
-          resp,
+          resp:stageResp,
+          legacyResp,
           prazo:normalizePrazoForUI(row),
           prazoIso:dateToISO(parseDateBR(normalizePrazoForUI(row))) || cleanSpaces(row.prazo_iso || ''),
+          stageStartedAt:cleanSpaces(row.etapa_iniciada_em || ''),
+          stageDeadline:cleanSpaces(row.etapa_prazo_maximo || ''),
           pri:['Alta','Média','Baixa'].includes(row.prioridade) ? row.prioridade : 'Média',
           stepId:resolved.id,
           stepIndex:resolved.index,
           obs:cleanSpaces(row.observacoes || ''),
-          avatar:Number.isFinite(Number(row.avatar)) ? Math.abs(Math.trunc(Number(row.avatar))) % AV_COLORS.length : avatarFromName(resp)
+          avatar:avatarFromName(stageResp)
         };
       });
       refresh();
@@ -469,6 +551,7 @@
       const fullPayload = { ...payload };
       if(!supportsEtapaId) delete fullPayload.etapa_id;
       if(!supportsPrazoIso) delete fullPayload.prazo_iso;
+      if(!supportsStageFields){ delete fullPayload.etapa_iniciada_em; delete fullPayload.etapa_prazo_maximo; delete fullPayload.etapa_responsavel; }
       let result = await action(fullPayload);
       if(result.error && fullPayload.etapa_id !== undefined && isMissingColumnError(result.error, 'etapa_id')){
         console.warn('Campo etapa_id não existe; usando compatibilidade por índice.', result.error);
@@ -481,6 +564,16 @@
         supportsPrazoIso = false;
         delete fullPayload.prazo_iso;
         result = await action(fullPayload);
+      }
+      if(result.error && (fullPayload.etapa_iniciada_em !== undefined || fullPayload.etapa_prazo_maximo !== undefined || fullPayload.etapa_responsavel !== undefined)){
+        const missingStageField = ['etapa_iniciada_em','etapa_prazo_maximo','etapa_responsavel'].some(col => isMissingColumnError(result.error, col));
+        if(missingStageField){
+          console.warn('Campos de etapa não existem no banco.', result.error);
+          supportsStageFields = false;
+          toast('Crie os campos de etapa no Supabase para salvar prazo e responsável por etapa.', 'amber');
+          delete fullPayload.etapa_iniciada_em; delete fullPayload.etapa_prazo_maximo; delete fullPayload.etapa_responsavel;
+          result = await action(fullPayload);
+        }
       }
       return result;
     }
@@ -507,23 +600,22 @@
     function processPayloadFromForm(){
       const name = cleanSpaces($('f-name').value);
       const sei = cleanSpaces($('f-id').value);
-      const resp = cleanSpaces($('f-resp').value);
       const prazoValidation = validatePrazoInput($('f-prazo').value);
       const stepIndex = clampStepIndex(parseInt($('f-step').value, 10));
       const step = STEPS[stepIndex] || STEPS[0];
       return {
-        validation:{ name, sei, resp, prazo:prazoValidation },
+        validation:{ name, sei, prazo:prazoValidation },
         payload:{
           sei,
           nome:name,
-          responsavel:resp,
+          responsavel:'',
           prazo:prazoValidation.br,
           prazo_iso:prazoValidation.iso || null,
           prioridade:$('f-pri').value,
           etapa_atual:stepIndex,
           etapa_id:step.id,
           observacoes:cleanSpaces($('f-obs').value),
-          avatar:avatarFromName(resp)
+          avatar:0
         }
       };
     }
@@ -546,6 +638,15 @@
       if(s === 'overdue') return `<span class="prazo-val pb-overdue">⚠ ${safeStr}</span>`;
       if(s === 'soon') return `<span class="prazo-val pb-soon">⏰ ${safeStr}</span>`;
       return `<span class="prazo-val pb-ok">${safeStr}</span>`;
+    }
+    function stageDeadlineBadge(item){
+      const text = dateTimeToBR(item?.stageDeadline);
+      const status = getStageDeadlineStatus(item);
+      if(status === 'done') return '';
+      if(!text || status === 'none') return '<span style="color:var(--t2)">—</span>';
+      if(status === 'overdue') return `<span class="pb-overdue">⚠ ${esc(text)}</span>`;
+      if(status === 'soon') return `<span class="pb-soon">⏰ ${esc(text)}</span>`;
+      return `<span class="pb-ok">${esc(text)}</span>`;
     }
     function updateKPI(){
       const lastIndex = Math.max(STEPS.length - 1, 0);
@@ -628,7 +729,7 @@
           <div class="row-grid">
             <div class="col-proc"><div class="proc-id">${esc(d.id)}</div><div class="proc-name">${esc(d.name)}</div><span class="stag ${stagStyle(d)}">${esc(stepLabel)}</span></div>
             <div class="col-resp"><div style="display:flex;align-items:center;gap:6px"><div class="avatar" style="background:${AV_COLORS[d.avatar]}">${esc(initials(d.resp))}</div><span class="resp-name">${esc(d.resp || '—')}</span></div></div>
-            <div class="col-prazo"><div class="prazo-wrap">${prazoBadge(d.prazo, d.stepIndex)}</div></div>
+            <div class="col-prazo"><div class="stage-meta"><strong>Prazo final:</strong><span>${prazoBadge(d.prazo, d.stepIndex)}</span><strong>Venc. etapa:</strong><span class="stage-due">${stageDeadlineBadge(d)}</span></div></div>
             <div class="col-pri"><span class="pri ${priCls(d.pri)}"><span class="pri-dot"></span>${esc(d.pri)}</span></div>
             <div class="col-tl"><div class="tl-outer"><div class="tl-track"></div><div class="tl-fill" style="width:${pct(d.stepIndex)}%"></div><div class="tl-dots">${dots}</div></div></div>
             <div class="col-acts"><button class="ab adv" data-id="${esc(d.db_id)}" title="Avançar etapa" aria-label="Avançar etapa">▶</button><button class="ab edit" data-id="${esc(d.db_id)}" title="Editar" aria-label="Editar processo">✎</button><button class="ab del" data-id="${esc(d.db_id)}" title="Excluir" aria-label="Excluir processo">✕</button></div>
@@ -711,12 +812,11 @@
       $('f-name').value = d?.name || '';
       $('f-id').value = d?.id || '';
       $('f-prazo').value = d?.prazo || '';
-      $('f-resp').value = d?.resp || '';
       $('f-pri').value = d?.pri || 'Média';
       $('f-obs').value = d?.obs || '';
       const currentIndex = d ? d.stepIndex : 0;
       $('f-step').innerHTML = STEPS.map((s,i) => `<option value="${i}"${currentIndex === i ? ' selected' : ''}>${i + 1}. ${esc(s.label)}</option>`).join('');
-      ['name','id','resp','prazo'].forEach(f => $('e-' + f).classList.remove('show'));
+      ['name','id','prazo'].forEach(f => $('e-' + f).classList.remove('show'));
       showOverlay('overlay', '#f-name');
     }
     function closeModal(){ hideOverlay('overlay'); editingId = null; }
@@ -730,13 +830,13 @@
         let ok = true;
         if(!validation.name){ $('e-name').classList.add('show'); ok = false; } else $('e-name').classList.remove('show');
         if(!validation.sei){ $('e-id').classList.add('show'); ok = false; } else $('e-id').classList.remove('show');
-        if(!validation.resp){ $('e-resp').classList.add('show'); ok = false; } else $('e-resp').classList.remove('show');
         if(!validation.prazo.ok){ $('e-prazo').classList.add('show'); ok = false; } else $('e-prazo').classList.remove('show');
         if(!ok) return;
         let success = false;
         if(editingId){
           const current = data.find(x => String(x.db_id) === String(editingId));
           if(!current){ toast('Processo não encontrado para atualização.', 'red'); return; }
+          payload.responsavel = current.legacyResp || '';
           success = await updateProcess(current.db_id, payload);
           if(success) toast('Processo atualizado', 'blue');
         } else {
@@ -751,47 +851,62 @@
         setButtonLoading(btn, false);
       }
     }
-    async function advStep(dbId){
+    function openStageChangeModal(dbId, targetStepIndex){
+      const d = data.find(x => String(x.db_id) === String(dbId));
+      if(!d) return;
+      const safeIndex = clampStepIndex(targetStepIndex);
+      if(safeIndex === d.stepIndex){ toast('Esta etapa já está selecionada.', 'blue'); return; }
+      const step = STEPS[safeIndex];
+      pendingStageChange = { dbId:d.db_id, targetStepIndex:safeIndex, targetStepId:step.id, previousStepIndex:d.stepIndex, previousStepId:d.stepId };
+      $('stage-title').textContent = 'Alterar etapa';
+      $('stage-msg').innerHTML = `Antes de salvar a mudança para <strong>${esc(step.label)}</strong>, informe o prazo máximo e o responsável desta etapa.`;
+      $('stage-resp').value = '';
+      $('stage-deadline').value = '';
+      $('e-stage-resp').classList.remove('show');
+      $('e-stage-deadline').classList.remove('show');
+      showOverlay('stage-overlay', '#stage-resp');
+    }
+    function closeStageChangeModal(){ hideOverlay('stage-overlay'); pendingStageChange = null; }
+    async function saveStageChange(){
+      if(processSaving || !pendingStageChange) return;
+      const btn = $('stage-save');
+      const resp = cleanSpaces($('stage-resp').value);
+      const deadline = parseDateTimeValue($('stage-deadline').value);
+      let ok = true;
+      if(!resp){ $('e-stage-resp').classList.add('show'); ok = false; } else $('e-stage-resp').classList.remove('show');
+      if(!deadline){ $('e-stage-deadline').classList.add('show'); ok = false; } else $('e-stage-deadline').classList.remove('show');
+      if(!ok) return;
+      const d = data.find(x => String(x.db_id) === String(pendingStageChange.dbId));
+      if(!d){ toast('Processo não encontrado para atualização.', 'red'); return; }
+      setButtonLoading(btn, true, 'Salvando...');
+      processSaving = true;
+      try{
+        const startedAt = new Date().toISOString();
+        const payload = {
+          etapa_atual:pendingStageChange.targetStepIndex,
+          etapa_id:pendingStageChange.targetStepId,
+          etapa_iniciada_em:startedAt,
+          etapa_prazo_maximo:deadline.toISOString(),
+          etapa_responsavel:resp
+        };
+        const success = await updateProcess(d.db_id, payload);
+        if(!success) return;
+        closeStageChangeModal();
+        await loadData({ showLoading:false });
+        toast('Etapa atualizada: ' + (STEPS[payload.etapa_atual]?.label || ''), 'green');
+      } finally {
+        processSaving = false;
+        setButtonLoading(btn, false);
+      }
+    }
+    function advStep(dbId){
       const d = data.find(x => String(x.db_id) === String(dbId));
       if(!d) return;
       if(d.stepIndex >= STEPS.length - 1){ toast('Processo já concluído', 'green'); return; }
-      const oldStepIndex = d.stepIndex;
-      const oldStepId = d.stepId;
-      const newStepIndex = clampStepIndex(d.stepIndex + 1);
-      const step = STEPS[newStepIndex];
-      d.stepIndex = newStepIndex;
-      d.stepId = step.id;
-      refresh();
-      const success = await updateProcess(d.db_id, { etapa_atual:newStepIndex, etapa_id:step.id });
-      if(!success){
-        d.stepIndex = oldStepIndex;
-        d.stepId = oldStepId;
-        refresh();
-        return;
-      }
-      await loadData({ showLoading:false });
-      toast('Etapa avançada: ' + step.label, 'green');
+      openStageChangeModal(dbId, d.stepIndex + 1);
     }
-    async function setProcessStep(dbId, stepIndex){
-      const d = data.find(x => String(x.db_id) === String(dbId));
-      if(!d) return;
-      const oldStepIndex = d.stepIndex;
-      const oldStepId = d.stepId;
-      const safeIndex = clampStepIndex(stepIndex);
-      const step = STEPS[safeIndex];
-      d.stepIndex = safeIndex;
-      d.stepId = step.id;
-      refresh();
-      const success = await updateProcess(d.db_id, { etapa_atual:safeIndex, etapa_id:step.id });
-      if(!success){
-        d.stepIndex = oldStepIndex;
-        d.stepId = oldStepId;
-        refresh();
-        return;
-      }
-      await loadData({ showLoading:false });
-      toast('Etapa atualizada: ' + step.label, 'blue');
-    }
+    function setProcessStep(dbId, stepIndex){ openStageChangeModal(dbId, stepIndex); }
+
     function askDelete(dbId){
       deleteId = dbId;
       const d = data.find(x => String(x.db_id) === String(dbId));
@@ -886,9 +1001,34 @@
       }
     }
 
+    function getNearDueProcesses(){
+      const now = new Date();
+      return data.filter(item => {
+        if(item.stepIndex >= STEPS.length - 1 || !item.stageStartedAt || !item.stageDeadline) return false;
+        const start = new Date(item.stageStartedAt);
+        const end = new Date(item.stageDeadline);
+        if(Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end <= start) return false;
+        const total = end - start;
+        const remaining = end - now;
+        return remaining >= 0 && remaining <= total * 0.2;
+      });
+    }
+    function showDueAlertIfNeeded(){
+      if(dueAlertShown) return;
+      const list = getNearDueProcesses();
+      if(!list.length) return;
+      dueAlertShown = true;
+      $('due-list').innerHTML = list.map(item => {
+        const stepLabel = STEPS[item.stepIndex]?.label || '';
+        return `<div class="due-item"><strong>${esc(item.name || item.id || 'Processo sem identificação')}</strong><span>Processo: ${esc(item.id || '—')}</span><span>Etapa atual: ${esc(stepLabel || '—')}</span><span>Responsável da etapa: ${esc(item.resp || '—')}</span><span>Vencimento da etapa: ${esc(dateTimeToBR(item.stageDeadline) || '—')}</span></div>`;
+      }).join('');
+      showOverlay('due-overlay', '#due-ok');
+    }
+    function closeDueAlert(){ hideOverlay('due-overlay'); }
+
     function exportCSV(){
-      const headers = ['Processo SEI','Nome','Responsável','Prioridade','Prazo','Etapa atual','Progresso %','Observações'];
-      const rows = getFilteredData().map(d => [d.id,d.name,d.resp,d.pri,d.prazo || '',STEPS[d.stepIndex]?.label || '',(STEPS.length <= 1 ? 100 : Math.round(d.stepIndex / (STEPS.length - 1) * 100)) + '%',d.obs || '']);
+      const headers = ['Processo SEI','Nome','Responsável da etapa','Prioridade','Prazo final','Etapa atual','Início da etapa','Vencimento da etapa','Progresso %','Observações'];
+      const rows = getFilteredData().map(d => [d.id,d.name,d.resp,d.pri,d.prazo || '',STEPS[d.stepIndex]?.label || '',dateTimeToBR(d.stageStartedAt) || '',dateTimeToBR(d.stageDeadline) || '',(STEPS.length <= 1 ? 100 : Math.round(d.stepIndex / (STEPS.length - 1) * 100)) + '%',d.obs || '']);
       const csv = [headers, ...rows].map(r => r.map(c => '"' + (c || '').toString().replace(/"/g,'""') + '"').join(',')).join('\n');
       const blob = new Blob(['\uFEFF' + csv], { type:'text/csv;charset=utf-8' });
       const url = URL.createObjectURL(blob);
@@ -949,9 +1089,16 @@
       $('btn-add-step').addEventListener('click', addStepItem);
       $('confirm-cancel').addEventListener('click', closeConfirm);
       $('confirm-delete').addEventListener('click', confirmDelete);
+      $('stage-close').addEventListener('click', closeStageChangeModal);
+      $('stage-cancel').addEventListener('click', closeStageChangeModal);
+      $('stage-save').addEventListener('click', saveStageChange);
+      $('due-close').addEventListener('click', closeDueAlert);
+      $('due-ok').addEventListener('click', closeDueAlert);
       $('overlay').addEventListener('click', e => { if(e.target === $('overlay')) closeModal(); });
       $('steps-overlay').addEventListener('click', e => { if(e.target === $('steps-overlay')) closeStepsManager(); });
       $('confirm-overlay').addEventListener('click', e => { if(e.target === $('confirm-overlay')) closeConfirm(); });
+      $('stage-overlay').addEventListener('click', e => { if(e.target === $('stage-overlay')) closeStageChangeModal(); });
+      $('due-overlay').addEventListener('click', e => { if(e.target === $('due-overlay')) closeDueAlert(); });
       $('tbody').addEventListener('click', e => {
         const adv = e.target.closest('.ab.adv');
         const edit = e.target.closest('.ab.edit');
@@ -974,7 +1121,9 @@
       });
       document.addEventListener('keydown', e => {
         if(e.key !== 'Escape') return;
-        if($('confirm-overlay').style.display === 'flex') closeConfirm();
+        if($('due-overlay').style.display === 'flex') closeDueAlert();
+        else if($('stage-overlay').style.display === 'flex') closeStageChangeModal();
+        else if($('confirm-overlay').style.display === 'flex') closeConfirm();
         else if($('steps-overlay').style.display === 'flex') closeStepsManager();
         else if($('overlay').style.display === 'flex') closeModal();
       });
@@ -987,6 +1136,7 @@
         const ok = await loadPanelSettings();
         if(ok) refresh();
         await loadData();
+        showDueAlertIfNeeded();
         startRealtime();
       } catch(error){
         tableLoading = false;
