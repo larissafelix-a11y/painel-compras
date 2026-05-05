@@ -155,6 +155,12 @@
           <div class="fgroup"><label for="f-pri">Prioridade</label><select class="finput" id="f-pri"><option>Alta</option><option selected>Média</option><option>Baixa</option></select></div>
           <div class="fgroup"><label for="f-step">Etapa atual</label><select class="finput" id="f-step"></select></div>
         </div>
+        <div id="f-stage-meta" style="display:none">
+          <div class="frow">
+            <div class="fgroup"><label for="f-stage-resp">Responsável da etapa *</label><input class="finput" id="f-stage-resp" placeholder="Nome completo"><div class="err" id="e-f-stage-resp">Campo obrigatório ao alterar a etapa</div></div>
+            <div class="fgroup"><label for="f-stage-deadline">Prazo máximo da etapa *</label><input class="finput" id="f-stage-deadline" type="date"><div class="err" id="e-f-stage-deadline">Informe uma data válida ao alterar a etapa</div></div>
+          </div>
+        </div>
         <div class="fgroup"><label for="f-obs">Observações</label><textarea class="finput" id="f-obs" rows="2" placeholder="Notas adicionais…" style="resize:vertical"></textarea></div>
       </div>
       <div class="modal-footer">
@@ -272,7 +278,7 @@
     let supportsPrazoIso = true;
     let supportsStageFields = true;
     let pendingStageChange = null;
-    let dueAlertShown = false;
+    let dueAlertSeenKeys = new Set();
 
     const $ = (id) => document.getElementById(id);
 
@@ -444,8 +450,14 @@
       return safe.split(' ').filter(Boolean).map(w => w[0]).join('').slice(0,2).toUpperCase() || '?';
     }
     function isMissingColumnError(error, columnName){
+      const target = cleanSpaces(columnName).toLowerCase();
+      if(!target) return false;
       const msg = `${error?.message || ''} ${error?.details || ''} ${error?.hint || ''}`.toLowerCase();
-      return error?.code === '42703' || msg.includes(columnName.toLowerCase()) || msg.includes('schema cache');
+      if(msg.includes(target)) return true;
+      if(error?.code === '42703'){
+        return msg.includes(`column "${target}"`) || msg.includes(`column ${target}`) || msg.includes(`'${target}'`) || msg.includes(`"${target}"`);
+      }
+      return false;
     }
     function userMessageForSupabaseError(error, action){
       const msg = (error?.message || '').toLowerCase();
@@ -560,6 +572,7 @@
           prazoIso:dateToISO(parseDateBR(normalizePrazoForUI(row))) || cleanSpaces(row.prazo_iso || ''),
           stageStartedAt:cleanSpaces(row.etapa_iniciada_em || ''),
           stageDeadline:cleanSpaces(row.etapa_prazo_maximo || ''),
+          updatedAt:cleanSpaces(row.updated_at || ''),
           pri:['Alta','Média','Baixa'].includes(row.prioridade) ? row.prioridade : 'Média',
           stepId:resolved.id,
           stepIndex:resolved.index,
@@ -575,7 +588,6 @@
       const fullPayload = { ...payload };
       if(!supportsEtapaId) delete fullPayload.etapa_id;
       if(!supportsPrazoIso) delete fullPayload.prazo_iso;
-      if(!supportsStageFields){ delete fullPayload.etapa_iniciada_em; delete fullPayload.etapa_prazo_maximo; delete fullPayload.etapa_responsavel; }
       let result = await action(fullPayload);
       if(result.error && fullPayload.etapa_id !== undefined && isMissingColumnError(result.error, 'etapa_id')){
         console.warn('Campo etapa_id não existe; usando compatibilidade por índice.', result.error);
@@ -593,7 +605,6 @@
         const missingStageField = ['etapa_iniciada_em','etapa_prazo_maximo','etapa_responsavel'].some(col => isMissingColumnError(result.error, col));
         if(missingStageField){
           console.warn('Campos de etapa não existem no banco.', result.error);
-          supportsStageFields = false;
           toast('Não foi possível alterar a etapa: crie os campos de prazo e responsável da etapa no Supabase.', 'red');
           return result;
         }
@@ -608,16 +619,21 @@
       if(result.error){ console.error('Erro ao inserir processo:', result.error); toast(userMessageForSupabaseError(result.error, 'salvar processo'), 'red'); return false; }
       return true;
     }
-    async function updateProcess(dbId, payload){
+    async function updateProcess(dbId, payload, expectedUpdatedAt = ''){
+      if(!expectedUpdatedAt){ toast('Não foi possível validar concorrência. Recarregue os dados antes de salvar.', 'red'); return false; }
       markManualProcessWrite();
-      const result = await writeWithOptionalColumns((p) => db.from('processos').update(p).eq('id', dbId), payload);
+      const stampedPayload = { ...payload, updated_at:new Date().toISOString() };
+      const result = await writeWithOptionalColumns((p) => db.from('processos').update(p).eq('id', dbId).eq('updated_at', expectedUpdatedAt).select('id,updated_at'), stampedPayload);
       if(result.error){ console.error('Erro ao atualizar processo:', result.error); toast(userMessageForSupabaseError(result.error, 'atualizar processo'), 'red'); return false; }
+      if(!result.data || !result.data.length){ toast('Este processo foi alterado por outra pessoa. Recarregue os dados e tente novamente.', 'amber'); await loadData({ showLoading:false }); return false; }
       return true;
     }
-    async function deleteProcess(dbId){
+    async function deleteProcess(dbId, expectedUpdatedAt = ''){
+      if(!expectedUpdatedAt){ toast('Não foi possível validar concorrência. Recarregue os dados antes de excluir.', 'red'); return false; }
       markManualProcessWrite();
-      const { error } = await db.from('processos').delete().eq('id', dbId);
+      const { data: deletedRows, error } = await db.from('processos').delete().eq('id', dbId).eq('updated_at', expectedUpdatedAt).select('id');
       if(error){ console.error('Erro ao excluir processo:', error); toast(userMessageForSupabaseError(error, 'excluir processo'), 'red'); return false; }
+      if(!deletedRows || !deletedRows.length){ toast('Este processo foi alterado por outra pessoa. Recarregue os dados e tente novamente.', 'amber'); await loadData({ showLoading:false }); return false; }
       return true;
     }
     function processPayloadFromForm(){
@@ -628,6 +644,8 @@
       const step = STEPS[stepIndex] || STEPS[0];
       return {
         validation:{ name, sei, prazo:prazoValidation },
+        stepIndex,
+        step,
         payload:{
           sei,
           nome:name,
@@ -840,6 +858,22 @@
     }
     function cancelSubtitleEdit(){ $('subtitle-input').value = $('subtitle-input').dataset.previous || $('subtitle-display').textContent || DEFAULT_SUBTITLE; $('subtitle-input').style.display = 'none'; $('subtitle-display').style.display = ''; }
 
+    function isMainModalStageChanged(){
+      const originalStep = clampStepIndex(parseInt($('f-step').dataset.originalStep || '0', 10));
+      const currentStep = clampStepIndex(parseInt($('f-step').value, 10));
+      return currentStep !== originalStep;
+    }
+    function updateMainModalStageMetaVisibility(){
+      const changed = isMainModalStageChanged();
+      $('f-stage-meta').style.display = changed ? '' : 'none';
+      if(!changed){
+        $('f-stage-resp').value = '';
+        $('f-stage-deadline').value = '';
+        $('e-f-stage-resp').classList.remove('show');
+        $('e-f-stage-deadline').classList.remove('show');
+      }
+    }
+
     function openModal(dbId = null){
       editingId = dbId;
       const d = dbId ? data.find(x => String(x.db_id) === String(dbId)) : null;
@@ -852,7 +886,13 @@
       $('f-obs').value = d?.obs || '';
       const currentIndex = d ? d.stepIndex : 0;
       $('f-step').innerHTML = STEPS.map((s,i) => `<option value="${i}"${currentIndex === i ? ' selected' : ''}>${i + 1}. ${esc(s.label)}</option>`).join('');
+      $('f-step').dataset.originalStep = String(currentIndex);
+      $('f-stage-resp').value = '';
+      $('f-stage-deadline').value = '';
       ['name','id','prazo'].forEach(f => $('e-' + f).classList.remove('show'));
+      $('e-f-stage-resp').classList.remove('show');
+      $('e-f-stage-deadline').classList.remove('show');
+      updateMainModalStageMetaVisibility();
       showOverlay('overlay', '#f-name');
     }
     function closeModal(){ hideOverlay('overlay'); editingId = null; }
@@ -862,18 +902,28 @@
       setButtonLoading(btn, true, 'Salvando...');
       processSaving = true;
       try{
-        const { validation, payload } = processPayloadFromForm();
+        const { validation, payload, stepIndex } = processPayloadFromForm();
+        const current = editingId ? data.find(x => String(x.db_id) === String(editingId)) : null;
+        const stageChanged = current ? stepIndex !== current.stepIndex : stepIndex !== 0;
+        const stageResp = cleanSpaces($('f-stage-resp').value);
+        const stageDeadline = parseStageDateValue($('f-stage-deadline').value);
         let ok = true;
         if(!validation.name){ $('e-name').classList.add('show'); ok = false; } else $('e-name').classList.remove('show');
         if(!validation.sei){ $('e-id').classList.add('show'); ok = false; } else $('e-id').classList.remove('show');
         if(!validation.prazo.ok){ $('e-prazo').classList.add('show'); ok = false; } else $('e-prazo').classList.remove('show');
+        if(stageChanged && !stageResp){ $('e-f-stage-resp').classList.add('show'); ok = false; } else $('e-f-stage-resp').classList.remove('show');
+        if(stageChanged && !stageDeadline){ $('e-f-stage-deadline').classList.add('show'); ok = false; } else $('e-f-stage-deadline').classList.remove('show');
         if(!ok) return;
+        if(stageChanged){
+          payload.etapa_iniciada_em = new Date().toISOString();
+          payload.etapa_prazo_maximo = stageDeadline.toISOString();
+          payload.etapa_responsavel = stageResp;
+        }
         let success = false;
         if(editingId){
-          const current = data.find(x => String(x.db_id) === String(editingId));
           if(!current){ toast('Processo não encontrado para atualização.', 'red'); return; }
           payload.responsavel = current.legacyResp || '';
-          success = await updateProcess(current.db_id, payload);
+          success = await updateProcess(current.db_id, payload, current.updatedAt);
           if(success) toast('Processo atualizado', 'blue');
         } else {
           success = await insertProcess(payload);
@@ -943,7 +993,7 @@
               etapa_prazo_maximo:deadline.toISOString(),
               etapa_responsavel:resp
             };
-        const success = await updateProcess(d.db_id, payload);
+        const success = await updateProcess(d.db_id, payload, d.updatedAt);
         if(!success) return;
         closeStageChangeModal();
         await loadData({ showLoading:false });
@@ -978,7 +1028,7 @@
         if(!deleteId) return;
         const current = data.find(x => String(x.db_id) === String(deleteId));
         if(!current){ toast('Processo não encontrado para exclusão.', 'red'); return; }
-        const success = await deleteProcess(current.db_id);
+        const success = await deleteProcess(current.db_id, current.updatedAt);
         if(!success) return;
         closeConfirm();
         await loadData();
@@ -1064,11 +1114,14 @@
       if(status === 'soon5') return 'Faltam 5 dias';
       return '';
     }
+    function dueAlertKey(entry){
+      const item = entry?.item || {};
+      return [item.db_id || item.id || '', item.stepId || '', item.stageDeadline || '', entry?.status || ''].join('|');
+    }
     function showDueAlertIfNeeded(){
-      if(dueAlertShown) return;
-      const list = getDueAlertProcesses();
+      const list = getDueAlertProcesses().filter(entry => !dueAlertSeenKeys.has(dueAlertKey(entry)));
       if(!list.length) return;
-      dueAlertShown = true;
+      list.forEach(entry => dueAlertSeenKeys.add(dueAlertKey(entry)));
       $('due-title').textContent = 'Atenção aos prazos de etapa';
       $('due-list').innerHTML = list.map(({ item, status }) => {
         const stepLabel = STEPS[item.stepIndex]?.label || '';
@@ -1078,10 +1131,15 @@
     }
     function closeDueAlert(){ hideOverlay('due-overlay'); }
 
+    function csvCell(value){
+      const text = (value ?? '').toString();
+      const safe = /^[=+\-@]/.test(text.trimStart()) ? "'" + text : text;
+      return '"' + safe.replace(/"/g,'""') + '"';
+    }
     function exportCSV(){
       const headers = ['Processo SEI','Nome','Responsável da etapa','Prioridade','Prazo final','Etapa atual','Início da etapa','Vencimento da etapa','Progresso %','Observações'];
       const rows = getFilteredData().map(d => [d.id,d.name,d.resp,d.pri,d.prazo || '',STEPS[d.stepIndex]?.label || '',dateOnlyToBR(d.stageStartedAt) || '',dateOnlyToBR(d.stageDeadline) || '',(STEPS.length <= 1 ? 100 : Math.round(d.stepIndex / (STEPS.length - 1) * 100)) + '%',d.obs || '']);
-      const csv = [headers, ...rows].map(r => r.map(c => '"' + (c || '').toString().replace(/"/g,'""') + '"').join(';')).join('\n');
+      const csv = [headers, ...rows].map(r => r.map(csvCell).join(';')).join('\n');
       const blob = new Blob(['\uFEFF' + csv], { type:'text/csv;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1136,6 +1194,7 @@
       $('modal-close').addEventListener('click', closeModal);
       $('modal-cancel').addEventListener('click', closeModal);
       $('modal-save').addEventListener('click', saveModal);
+      $('f-step').addEventListener('change', updateMainModalStageMetaVisibility);
       $('steps-close').addEventListener('click', closeStepsManager);
       $('steps-cancel').addEventListener('click', closeStepsManager);
       $('steps-save').addEventListener('click', saveSteps);
